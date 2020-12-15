@@ -4,7 +4,21 @@
     <projectFile>compiler-c0.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4236b4a-1be6-482f-9cb4-77e99f2cc659" name="Default Changelist" comment="" />
+    <list default="true" id="e4236b4a-1be6-482f-9cb4-77e99f2cc659" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/char_parser/CharParser.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/char_parser/Pos.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/global_config/GlobalConfig.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tokenizer/Tokenizer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tokenizer/token/Token.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tokenizer/token/TokenType.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tokenizer/token/token_extension/CharExtensions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tokenizer/token/token_extension/StringExtensions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tokenizer/token/token_extension/TokenTypeExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.compiler-c0/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.compiler-c0/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.compiler-c0/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.compiler-c0/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,6 +27,30 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="IdeDocumentHistory">
+    <changedPaths>
+      <option value="$PROJECT_DIR$/src/char_parser/Pos.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/Token.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/TokenExtensions.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/token_extension/TokenExtensions.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/token_extension/TokentypeExtensions.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/token_extension/TokenTypeExtensions.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/TokenType.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/token_extension/StringExtensions.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/token_extension/CharExtensions.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/token/TokenType.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/token/token_extension/CharExtensions.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/token/token_extension/TokenTypeExtensions.cs" />
+      <option value="$PROJECT_DIR$/src/global_config/GlobalConfig.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/token/Token.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/token/token_extension/StringExtensions.cs" />
+      <option value="$PROJECT_DIR$/src/tokenizer/Tokenizer.cs" />
+      <option value="$PROJECT_DIR$/Program.cs" />
+      <option value="$PROJECT_DIR$/src/char_parser/CharParser.cs" />
+      <option value="$PROJECT_DIR$/input.txt" />
+      <option value="$PROJECT_DIR$/.gitignore" />
+    </changedPaths>
+  </component>
   <component name="ProjectId" id="1lgdKpaUYCFk1K46h0A2s7VRoSx" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -20,17 +58,20 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.35018626" />
+    <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.0" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Color Scheme Font" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager">
     <configuration name="compiler-c0" type="DotNetProject" factoryName=".NET Project">
-      <option name="EXE_PATH" value="" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
+      <option name="EXE_PATH" value="$PROJECT_DIR$/bin/Debug/net5.0/compiler-c0.dll" />
+      <option name="PROGRAM_PARAMETERS" value="&quot;input.txt&quot; &quot;output.o0&quot;" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="USE_MONO" value="0" />
@@ -38,9 +79,9 @@
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/compiler-c0.csproj" />
       <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
       <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
-      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="0" />
       <option name="PROJECT_KIND" value="DotNetCore" />
-      <option name="PROJECT_TFM" value="" />
+      <option name="PROJECT_TFM" value="net5.0" />
       <method v="2">
         <option name="Build" />
       </method>
@@ -55,7 +96,8 @@
       <option name="presentableId" value="Default" />
       <updated>1608022611620</updated>
       <workItem from="1608022630293" duration="37000" />
-      <workItem from="1608022750484" duration="62000" />
+      <workItem from="1608022750484" duration="4447000" />
+      <workItem from="1608031614681" duration="9186000" />
     </task>
     <servers />
   </component>
@@ -64,6 +106,18 @@
   </component>
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
