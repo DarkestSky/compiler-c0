@@ -1,0 +1,5 @@
+[jobs.c0]
+image = { source = "dockerfile", path = ".", tag = "compiler-c0" }
+run = [
+    "dotnet compiler-c0.dll $input $asm"
+]
