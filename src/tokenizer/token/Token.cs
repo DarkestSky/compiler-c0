@@ -1,3 +1,4 @@
+using System.Linq;
 using compiler_c0.char_parser;
 
 namespace compiler_c0.tokenizer.token
@@ -17,6 +18,17 @@ namespace compiler_c0.tokenizer.token
         public override string ToString()
         {
             return $"{TokenType} at {Pos}";
+        }
+
+        public bool Is(params TokenType[] type)
+        {
+            return type.Contains(TokenType);
+        }
+
+        public bool IsLiteral()
+        {
+            return Is(TokenType.LiteralCharacter, TokenType.LiteralDouble,
+                TokenType.LiteralNumber, TokenType.LiteralString);
         }
     }
 }

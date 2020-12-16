@@ -1,8 +1,9 @@
 ﻿using System;
+using compiler_c0.analyser;
 using compiler_c0.char_parser;
 using compiler_c0.global_config;
 using compiler_c0.tokenizer;
-using compiler_c0.tokenizer.token.token_extension;
+using compiler_c0.tokenizer.token.extensions;
 
 namespace compiler_c0
 {
@@ -10,7 +11,6 @@ namespace compiler_c0
     {
         static void Main(string[] args)
         {
-            Console.WriteLine('1'.IsFirstOfOperator());
             var globalConfig = GlobalConfig.Instance;
             
             globalConfig.InputFilePath = args[0];
@@ -18,10 +18,9 @@ namespace compiler_c0
 
             var charParser = CharParser.Instance;
             var tokenizer = Tokenizer.Instance;
-            while (tokenizer.HasNext())
-            {
-                Console.WriteLine(tokenizer.NextToken());
-            }
+            var analyser = Analyser.Instance;
+            
+            analyser.Analyse();
         }
     }
 }

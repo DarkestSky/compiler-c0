@@ -6,4 +6,16 @@
         <RootNamespace>compiler_c0</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Compile Remove="src\analyser\sub_analyser\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="src\analyser\sub_analyser\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="src\analyser\sub_analyser\**" />
+    </ItemGroup>
+
 </Project>

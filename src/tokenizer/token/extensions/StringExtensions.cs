@@ -1,4 +1,4 @@
-namespace compiler_c0.tokenizer.token.token_extension
+namespace compiler_c0.tokenizer.token.extensions
 {
     public static class StringExtensions
     {

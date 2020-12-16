@@ -1,8 +1,9 @@
 using System;
+using System.Linq;
 using System.Text;
 using compiler_c0.char_parser;
 using compiler_c0.tokenizer.token;
-using compiler_c0.tokenizer.token.token_extension;
+using compiler_c0.tokenizer.token.extensions;
 using Microsoft.VisualBasic.CompilerServices;
 
 namespace compiler_c0.tokenizer
@@ -43,6 +44,17 @@ namespace compiler_c0.tokenizer
             _peeked ??= _fetchNextToken();
 
             return _peeked;
+        }
+
+        public Token ExpectToken(params TokenType[] type)
+        {
+            var token = NextToken();
+            if (type.Contains(token.TokenType))
+            {
+                return token;
+            }
+
+            throw new Exception($"unexpected token: {token}");
         }
 
         private CharParser _charParser = CharParser.Instance;
