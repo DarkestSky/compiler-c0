@@ -6,7 +6,9 @@
       <e p="bin" t="ExcludeRecursive" />
       <e p="compiler-c0.csproj" t="IncludeRecursive" />
       <e p="compiler-c0.sln" t="IncludeFlat" />
+      <e p="Dockerfile" t="Include" />
       <e p="input.txt" t="Include" />
+      <e p="judge.toml" t="Include" />
       <e p="obj" t="ExcludeRecursive">
         <e p="Debug" t="Include">
           <e p="net5.0" t="Include">
@@ -17,21 +19,53 @@
       <e p="packages" t="ExcludeRecursive" />
       <e p="Program.cs" t="Include" />
       <e p="src" t="Include">
+        <e p="analyser" t="Include">
+          <e p="Analyser.cs" t="Include" />
+          <e p="sub_function" t="Include">
+            <e p="expression" t="Include">
+              <e p="ExpressionAnalyser.cs" t="Include" />
+              <e p="ExpressionCombiner.cs" t="Include" />
+              <e p="ExpressionValue.cs" t="Include" />
+            </e>
+            <e p="statement" t="Include">
+              <e p="FunctionAnalyser.cs" t="Include" />
+              <e p="StatementAnalyser.cs" t="Include" />
+            </e>
+          </e>
+        </e>
         <e p="char_parser" t="Include">
           <e p="CharParser.cs" t="Include" />
           <e p="Pos.cs" t="Include" />
         </e>
+        <e p="generator" t="Include">
+          <e p="Generator.cs" t="Include" />
+        </e>
         <e p="global_config" t="Include">
           <e p="GlobalConfig.cs" t="Include" />
         </e>
+        <e p="symbol_manager" t="Include">
+          <e p="GlobalSymbolTable.cs" t="Include" />
+          <e p="symbol" t="Include">
+            <e p="Function.cs" t="Include" />
+            <e p="Param.cs" t="Include" />
+            <e p="Symbol.cs" t="Include" />
+            <e p="Variable.cs" t="Include" />
+          </e>
+          <e p="SymbolManager.cs" t="Include" />
+          <e p="SymbolTable.cs" t="Include" />
+          <e p="value_type" t="Include">
+            <e p="entension.cs" t="Include" />
+            <e p="ValueType.cs" t="Include" />
+          </e>
+        </e>
         <e p="tokenizer" t="Include">
           <e p="token" t="Include">
-            <e p="Token.cs" t="Include" />
-            <e p="token_extension" t="Include">
+            <e p="extensions" t="Include">
               <e p="CharExtensions.cs" t="Include" />
               <e p="StringExtensions.cs" t="Include" />
-              <e p="TokentypeExtensions.cs" t="Include" />
+              <e p="TokenExtensions.cs" t="Include" />
             </e>
+            <e p="Token.cs" t="Include" />
             <e p="TokenType.cs" t="Include" />
           </e>
           <e p="Tokenizer.cs" t="Include" />
