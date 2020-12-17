@@ -30,7 +30,7 @@ namespace compiler_c0.analyser.sub_function
                     AnalyseReturnStatement();
                     break;
                 case TokenType.LBrace:
-                    AnalyseBlockStatement();
+                    AnalyseBlockStatement(true);
                     break;
                 case TokenType.Semicolon:
                     AnalyseEmptyStatement();
@@ -89,13 +89,13 @@ namespace compiler_c0.analyser.sub_function
         {
             Tokenizer.ExpectToken(TokenType.If);
             ExpressionAnalyser.AnalyseExpression();
-            AnalyseBlockStatement();
+            AnalyseBlockStatement(true);
             if (Tokenizer.PeekToken().Is(TokenType.Else))
             {
                 Tokenizer.ExpectToken(TokenType.Else);
                 if (Tokenizer.PeekToken().Is(TokenType.LBrace))
                 {
-                    AnalyseBlockStatement();
+                    AnalyseBlockStatement(true);
                 }
                 else
                 {
@@ -108,10 +108,14 @@ namespace compiler_c0.analyser.sub_function
         {
             Tokenizer.ExpectToken(TokenType.While);
             ExpressionAnalyser.AnalyseExpression();
-            AnalyseBlockStatement();
+            AnalyseBlockStatement(true);
         }
 
-        public static void AnalyseBlockStatement()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="createTable">Weather To Create A New Symbol Table</param>
+        public static void AnalyseBlockStatement(bool createTable)
         {
             Tokenizer.ExpectToken(TokenType.LBrace);
             while (!Tokenizer.PeekToken().Is(TokenType.RBrace))

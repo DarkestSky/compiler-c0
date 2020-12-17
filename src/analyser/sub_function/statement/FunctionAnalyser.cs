@@ -1,22 +1,33 @@
+using System;
+using compiler_c0.symbol_manager;
+using compiler_c0.symbol_manager.symbol;
+using compiler_c0.symbol_manager.value_type;
 using compiler_c0.tokenizer;
 using compiler_c0.tokenizer.token;
 
-namespace compiler_c0.analyser.sub_function
+namespace compiler_c0.analyser.sub_function.statement
 {
     public static class FunctionAnalyser
     {
         private static readonly Tokenizer Tokenizer = Tokenizer.Instance;
+        private static readonly SymbolManager SymbolManager = SymbolManager.Instance;
         
         public static void AnalyseFunction()
         {
             Tokenizer.ExpectToken(TokenType.Fn);
-            Tokenizer.ExpectToken(TokenType.Identifier);
+            var fun = Tokenizer.ExpectToken(TokenType.Identifier);
+            var funDef = SymbolManager.NewFunction((string) fun.Value);
+            SymbolManager.CreateSymbolTable();
+            
             Tokenizer.ExpectToken(TokenType.LParen);
             AnalyseParamList();
             Tokenizer.ExpectToken(TokenType.RParen);
             Tokenizer.ExpectToken(TokenType.Arrow);
-            Tokenizer.ExpectToken(TokenType.Identifier);
-            StatementAnalyser.AnalyseBlockStatement();
+            
+            var returnType = Tokenizer.ExpectToken(TokenType.Identifier);
+            funDef.SetReturnType(returnType.ToValueType());
+            StatementAnalyser.AnalyseBlockStatement(false);
+            SymbolManager.DeleteSymbolTable();
         }
 
         private static void AnalyseParamList()
@@ -33,12 +44,21 @@ namespace compiler_c0.analyser.sub_function
         {
             if (Tokenizer.PeekToken().Is(TokenType.RParen))
                 return;
+            var isConst = false;
             if (Tokenizer.PeekToken().Is(TokenType.Const))
             {
+                isConst = true;
                 Tokenizer.ExpectToken(TokenType.Const);
             }
 
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
+            Tokenizer.ExpectToken(TokenType.Colon);
+            var type = Tokenizer.ExpectToken(TokenType.Identifier);
+
+            
+            var param = SymbolManager.NewParam((string) ident.Value);
+            param.IsConst = isConst;
+            param.ValueType = type.ToValueType();
         }
     }
 }

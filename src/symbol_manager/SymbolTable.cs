@@ -8,13 +8,9 @@ namespace compiler_c0.symbol_manager
     {
         protected readonly Dictionary<string, Symbol> Symbols = new();
 
-        public void AddVariable()
-        {
-            
-        }
-
         public virtual void AddSymbol(string name, Symbol symbol)
         {
+            Symbols.Add(name, symbol);
         }
 
         /// <summary>

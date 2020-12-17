@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using compiler_c0.symbol_manager.symbol;
+using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
 
 namespace compiler_c0.symbol_manager
 {
@@ -11,12 +12,22 @@ namespace compiler_c0.symbol_manager
 
         private SymbolTable CurSymbolTable => _symbolTables.Last();
 
-        public SymbolManager()
+        private SymbolManager()
         {
             // put a global symbol table to the bottom
             _symbolTables.Add(new GlobalSymbolTable());
+            
+            // initial _start_ function
+            // TODO
         }
-        
+
+        private static SymbolManager _instance;
+
+        public static SymbolManager Instance
+        {
+            get { return _instance ??= new SymbolManager(); }
+        }
+
         public Symbol FindSymbol(string name)
         {
             for (var i = _symbolTables.Count; i >= 0; i--)
@@ -30,33 +41,71 @@ namespace compiler_c0.symbol_manager
             return null;
         }
 
-        public bool IsDefined(string name)
+        private void CheckDuplicate(string name)
         {
-            return CurSymbolTable.FindSymbol(name) != null;
+            if (CurSymbolTable.FindSymbol(name) != null)
+            {
+                throw new Exception($"duplicated definition: {name}");
+            }
         }
 
         public Variable NewVariable(string name, ValueType type)
         {
+            CheckDuplicate(name);
             // alloc offset according to TYPE
             var variable = new Variable();
-            
+
             CurSymbolTable.AddSymbol(name, variable);
 
             return variable;
         }
 
-        public Function NewFunction(string name, ValueType returnType)
+        public Function NewFunction(string name)
         {
-            if (CurSymbolTable ! is GlobalSymbolTable)
+            if (!(CurSymbolTable is GlobalSymbolTable))
             {
                 throw new Exception("function is not allowed defining here");
             }
 
+            CheckDuplicate(name);
+            
             var function = new Function();
-            
+
             CurSymbolTable.AddSymbol(name, function);
-            
+
             return function;
+        }
+
+        public Param NewParam(string name)
+        {
+            CheckDuplicate(name);
+            var param = new Param();
+
+            CurSymbolTable.AddSymbol(name, param);
+            return param;
+        }
+
+        public void CreateSymbolTable()
+        {
+            _symbolTables.Add(new SymbolTable());
+        }
+
+        public void DeleteSymbolTable()
+        {
+            _symbolTables.RemoveAt(_symbolTables.Count - 1);
+        }
+        
+        public Function CurFunction { get; set; }
+
+        public void Generator()
+        {
+            if (_symbolTables.Count != 1)
+            {
+                throw new Exception("symbol table count is not 1");
+            }
+            
+            // check main()
+            
         }
     }
 }
