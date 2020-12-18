@@ -9,7 +9,7 @@ namespace compiler_c0.symbol_manager.symbol
 {
     public class Function : Symbol
     {
-        private uint name { get; set; }
+        public uint Name { get; set; }
 
         public uint returnSlot { get; set; }
 
@@ -19,6 +19,11 @@ namespace compiler_c0.symbol_manager.symbol
         private ValueType ReturnType { get; set; }
 
         private List<Instruction> Instructions = new();
+
+        public Function()
+        {
+            
+        }
 
         public void SetReturnType(ValueType valueType)
         {
@@ -46,15 +51,16 @@ namespace compiler_c0.symbol_manager.symbol
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"Name:");
-            sb.AppendLine($"ReturnSlot: {returnSlot}");
-            sb.AppendLine($"ParamSlot:");
-            sb.AppendLine($"LocSlot:");
+            sb.AppendLine("\tFunction:");
+            sb.AppendLine($"\t\tName: {Name}");
+            sb.AppendLine($"\t\tReturnSlot: {returnSlot}");
+            sb.AppendLine($"\t\tParamSlot:");
+            sb.AppendLine($"\t\tLocSlot:");
 
-            sb.AppendLine("Instructions:");
+            sb.AppendLine("\t\tInstructions:");
             foreach (var instruction in Instructions)
             {
-                sb.AppendLine(instruction.ToString());
+                sb.AppendLine($"\t\t\t{instruction}");
             }
 
             return sb.ToString();
@@ -62,7 +68,7 @@ namespace compiler_c0.symbol_manager.symbol
 
         public IEnumerable<byte> ToBytes()
         {
-            var nameByte = BitConverter.GetBytes(name).Reverse();
+            var nameByte = BitConverter.GetBytes(Name).Reverse();
             var returnByte = BitConverter.GetBytes(returnSlot).Reverse();
             var paramByte = BitConverter.GetBytes(param_slots).Reverse();
             var locByte = BitConverter.GetBytes(loc_slots).Reverse();

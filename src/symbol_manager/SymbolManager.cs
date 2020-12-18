@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using compiler_c0.symbol_manager.symbol;
 using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
 
@@ -53,7 +54,7 @@ namespace compiler_c0.symbol_manager
         {
             CheckDuplicate(name);
             // alloc offset according to TYPE
-            var variable = new Variable();
+            var variable = new Variable(type, true);
 
             CurSymbolTable.AddSymbol(name, variable);
 
@@ -68,6 +69,10 @@ namespace compiler_c0.symbol_manager
             }
 
             CheckDuplicate(name);
+            
+            // add name into global variable;
+            var variable = NewVariable($"fun({name})", ValueType.String);
+            variable.SetValue(name);
 
             var function = new Function();
 

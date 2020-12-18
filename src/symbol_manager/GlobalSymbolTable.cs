@@ -22,6 +22,7 @@ namespace compiler_c0.symbol_manager
             else if (symbol is Function function)
             {
                 Functions.Add(new KeyValuePair<string, Function>(name, function));
+                function.Name = (uint) Variables.Count - 1;
             }
             else
             {
