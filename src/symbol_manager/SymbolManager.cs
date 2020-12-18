@@ -34,7 +34,7 @@ namespace compiler_c0.symbol_manager
 
         public Symbol FindSymbol(string name)
         {
-            for (var i = _symbolTables.Count; i >= 0; i--)
+            for (var i = _symbolTables.Count -1; i >= 0; i--)
             {
                 if (_symbolTables[i].FindSymbol(name) != null)
                 {

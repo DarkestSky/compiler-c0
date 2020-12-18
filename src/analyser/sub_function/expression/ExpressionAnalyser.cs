@@ -1,6 +1,7 @@
 using System;
 using compiler_c0.instruction;
 using compiler_c0.symbol_manager;
+using compiler_c0.symbol_manager.symbol;
 using compiler_c0.tokenizer;
 using compiler_c0.tokenizer.token;
 using compiler_c0.tokenizer.token.extensions;
@@ -34,9 +35,15 @@ namespace compiler_c0.analyser.sub_function.expression
             }
             else if (Tokenizer.PeekToken().Is(TokenType.Identifier))
             {
-                // todo
-                AnalyseIdentExpression();
-                // AnalyseCallExpression();
+                var token = Tokenizer.PeekToken();
+                var symbol = SymbolManager.FindSymbol((string) token.Value);
+
+                if (symbol is Function)
+                    value = AnalyseCallExpression();
+                else if (symbol is Variable)
+                    value = AnalyseIdentExpression();
+                else
+                    throw new Exception("symbol not found");
             }
             else if (Tokenizer.PeekToken().IsLiteral())
             {
@@ -90,8 +97,11 @@ namespace compiler_c0.analyser.sub_function.expression
         public static ExpressionValue AnalyseIdentExpression()
         {
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
+            var variable = (Variable) SymbolManager.FindSymbol((string) ident.Value);
+            SymbolManager.AddLoadAddressInstruction(variable);
+            SymbolManager.AddInstruction(new Instruction(InstructionType.Load64));
 
-            return new ExpressionValue(ValueType.Void);
+            return new ExpressionValue(variable.ValueType);
         }
 
         public static ExpressionValue AnalyseCallExpression()
