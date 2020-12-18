@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using compiler_c0.symbol_manager.symbol;
 
 namespace compiler_c0.symbol_manager
@@ -56,13 +57,46 @@ namespace compiler_c0.symbol_manager
 
         public override string ToString()
         {
-            return base.ToString();
+            var sb = new StringBuilder();
+
+            sb.AppendLine($"Magic: {0x72303B3Eu}");
+            sb.AppendLine($"Version: {0x1}");
+            sb.AppendLine($"GlobalDef(Count: {Variables.Count}):");
+            foreach (var pair in Variables)
+            {
+                sb.Append(pair.Value);
+            }
+
+            sb.AppendLine($"Functions(Count: {Functions.Count})");
+            foreach (var pair in Functions)
+            {
+                sb.Append(pair.Value);
+            }
+
+            return sb.ToString();
         }
 
         public IEnumerable<byte> ToBytes()
         {
-            //todo
-            return Enumerable.Empty<byte>();
+            var head =  Enumerable.Empty<byte>()
+                .Concat(BitConverter.GetBytes(0x72303b3Eu).Reverse())
+                .Concat(BitConverter.GetBytes(1).Reverse());
+
+            var globalDef = BitConverter.GetBytes(Variables.Count).Reverse();
+            foreach (var pair in Variables)
+            {
+                globalDef = globalDef.Concat(pair.Value.ToBytes());
+            }
+
+            var functionDef = BitConverter.GetBytes(Functions.Count).Reverse();
+            foreach (var pair in Functions)
+            {
+                functionDef = functionDef.Concat(pair.Value.ToBytes());
+            }
+
+            return head
+                .Concat(globalDef)
+                .Concat(functionDef);
         }
     }
 }

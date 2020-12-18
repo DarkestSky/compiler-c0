@@ -1,10 +1,13 @@
 using System;
+using compiler_c0.instruction;
+using compiler_c0.symbol_manager;
 using compiler_c0.tokenizer.token;
 
 namespace compiler_c0.analyser.sub_function.expression
 {
     public static class ExpressionCombiner
     {
+        private static readonly SymbolManager SymbolManager = SymbolManager.Instance;
         public static ExpressionValue Combine(ExpressionValue lValue, Token token, ExpressionValue rValue)
         {
             switch (token.TokenType)
@@ -38,6 +41,7 @@ namespace compiler_c0.analyser.sub_function.expression
 
         private static ExpressionValue CombinePlus(ExpressionValue lValue, ExpressionValue rValue)
         {
+            SymbolManager.CurFunction.AddInstruction(new Instruction(InstructionType.AddI));
             return lValue;
         }
         

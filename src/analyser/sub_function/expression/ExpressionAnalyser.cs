@@ -1,4 +1,6 @@
 using System;
+using compiler_c0.instruction;
+using compiler_c0.symbol_manager;
 using compiler_c0.tokenizer;
 using compiler_c0.tokenizer.token;
 using compiler_c0.tokenizer.token.extensions;
@@ -7,6 +9,7 @@ namespace compiler_c0.analyser.sub_function.expression
 {
     public static class ExpressionAnalyser
     {
+        private static readonly SymbolManager SymbolManager = SymbolManager.Instance;
         public static ExpressionValue AnalyseExpression()
         {
             var lValue = ParsePrimary();
@@ -37,7 +40,7 @@ namespace compiler_c0.analyser.sub_function.expression
             }
             else if (Tokenizer.PeekToken().IsLiteral())
             {
-                Tokenizer.NextToken();
+                AnalyseLiteralExpression();
             }
             else
             {
@@ -90,6 +93,19 @@ namespace compiler_c0.analyser.sub_function.expression
             {
                 Tokenizer.ExpectToken(TokenType.Comma);
                 Tokenizer.ExpectToken(TokenType.Identifier);
+            }
+        }
+
+        private static void AnalyseLiteralExpression()
+        {
+            var token = Tokenizer.NextToken();
+            switch (token.TokenType)
+            {
+                case TokenType.LiteralNumber:
+                    SymbolManager.CurFunction.AddInstruction(
+                        new Instruction(InstructionType.Push, (ulong) token.Value));
+                    break;
+                // todo
             }
         }
     }

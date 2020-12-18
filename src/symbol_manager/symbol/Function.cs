@@ -18,7 +18,7 @@ namespace compiler_c0.symbol_manager.symbol
         private uint loc_slots { get; set; }
         private ValueType ReturnType { get; set; }
 
-        private List<Instruction> Instructions;
+        private List<Instruction> Instructions = new();
 
         public void SetReturnType(ValueType valueType)
         {
@@ -36,6 +36,11 @@ namespace compiler_c0.symbol_manager.symbol
                 default:
                     throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null);
             }
+        }
+
+        public void AddInstruction(Instruction instruction)
+        {
+            Instructions.Add(instruction);
         }
 
         public override string ToString()

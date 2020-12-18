@@ -18,7 +18,7 @@ namespace compiler_c0.symbol_manager
             _symbolTables.Add(new GlobalSymbolTable());
 
             // initial _start_ function
-            // TODO
+            NewFunction("_start_");
         }
 
         private static SymbolManager _instance;
@@ -116,6 +116,7 @@ namespace compiler_c0.symbol_manager
             
             
             // output binary code
+            Console.Write(((GlobalSymbolTable)CurSymbolTable).ToString());
         }
     }
 }
