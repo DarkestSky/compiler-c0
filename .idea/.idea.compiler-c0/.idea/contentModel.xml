@@ -43,6 +43,13 @@
         <e p="global_config" t="Include">
           <e p="GlobalConfig.cs" t="Include" />
         </e>
+        <e p="instruction" t="Include">
+          <e p="extension" t="Include">
+            <e p="InstructionTypeExtension.cs" t="Include" />
+          </e>
+          <e p="Instruction.cs" t="Include" />
+          <e p="InstructionType.cs" t="Include" />
+        </e>
         <e p="symbol_manager" t="Include">
           <e p="GlobalSymbolTable.cs" t="Include" />
           <e p="symbol" t="Include">

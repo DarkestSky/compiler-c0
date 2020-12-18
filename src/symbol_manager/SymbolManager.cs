@@ -16,7 +16,7 @@ namespace compiler_c0.symbol_manager
         {
             // put a global symbol table to the bottom
             _symbolTables.Add(new GlobalSymbolTable());
-            
+
             // initial _start_ function
             // TODO
         }
@@ -68,10 +68,11 @@ namespace compiler_c0.symbol_manager
             }
 
             CheckDuplicate(name);
-            
+
             var function = new Function();
 
             CurSymbolTable.AddSymbol(name, function);
+            CurFunction = function;
 
             return function;
         }
@@ -94,18 +95,27 @@ namespace compiler_c0.symbol_manager
         {
             _symbolTables.RemoveAt(_symbolTables.Count - 1);
         }
-        
+
         public Function CurFunction { get; set; }
 
         public void Generator()
         {
-            if (_symbolTables.Count != 1)
+            if (_symbolTables.Count != 1 || !(CurSymbolTable is GlobalSymbolTable))
             {
-                throw new Exception("symbol table count is not 1");
+                throw new Exception("symbol manager error with root symbol table");
+            }
+
+            // check main()
+            if (CurSymbolTable is GlobalSymbolTable globalSymbolTable
+                && globalSymbolTable.FindFunction("main") == -1)
+            {
+                throw new Exception("no main function found");
             }
             
-            // check main()
+            // add call main into _start_ function
             
+            
+            // output binary code
         }
     }
 }
