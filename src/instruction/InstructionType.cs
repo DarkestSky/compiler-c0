@@ -39,8 +39,7 @@ namespace compiler_c0.instruction
         CmpI = 0x30,
         CmpU = 0x31,
         CmpF = 0x32,
-        NegI = 0x33,
-        NegU = 0x34,
+        NegI = 0x34,
         NegF = 0x35,
 
         ItoF = 0x36,

@@ -3,12 +3,16 @@ using compiler_c0.tokenizer;
 using compiler_c0.tokenizer.token;
 using compiler_c0.analyser.sub_function;
 using compiler_c0.analyser.sub_function.expression;
+using compiler_c0.instruction;
+using compiler_c0.symbol_manager;
+using compiler_c0.symbol_manager.value_type;
 
 namespace compiler_c0.analyser.sub_function
 {
     public static class StatementAnalyser
     {
         private static readonly Tokenizer Tokenizer = Tokenizer.Instance;
+        private static readonly SymbolManager SymbolManager = SymbolManager.Instance;
 
         public static void AnalyseStatement()
         {
@@ -69,8 +73,21 @@ namespace compiler_c0.analyser.sub_function
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
             Tokenizer.ExpectToken(TokenType.Colon);
             var type = Tokenizer.ExpectToken(TokenType.Identifier);
+            var variable = SymbolManager.NewVariable((string) ident.Value, type.ToValueType());
             Tokenizer.ExpectToken(TokenType.Assign);
-            ExpressionAnalyser.AnalyseExpression();
+            
+            // load symbol address
+            SymbolManager.AddLoadAddressInstruction(variable);
+            
+            var e = ExpressionAnalyser.AnalyseExpression();
+            
+            if (variable.ValueType != e.ValueType)
+            {
+                throw new Exception("value type not match");
+            }
+            SymbolManager.CurFunction.AddInstruction(new Instruction(InstructionType.Store64));
+            variable.Initial();
+            
             Tokenizer.ExpectToken(TokenType.Semicolon);
         }
 

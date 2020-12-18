@@ -59,7 +59,6 @@ namespace compiler_c0.instruction.extension
             InstructionType.CmpU,
             InstructionType.CmpF,
             InstructionType.NegI,
-            InstructionType.NegU,
             InstructionType.NegF,
             InstructionType.ItoF,
             InstructionType.FtoI,

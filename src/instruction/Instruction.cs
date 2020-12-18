@@ -52,14 +52,14 @@ namespace compiler_c0.instruction
             switch (_valueSize)
             {
                 case 1:
-                    s.Append($", ParamType: U32Int, Param:{BitConverter.ToUInt32(_value)}");
+                    s.Append($"\tParamType: U32Int\tParam: {BitConverter.ToUInt32(_value)}");
                     break;
                 case 2:
-                    s.Append($", ParamType: U64Int, Param:{BitConverter.ToUInt64(_value)}");
+                    s.Append($"\tParamType: U64Int\tParam: {BitConverter.ToUInt64(_value)}");
                     break;
             }
 
-            return s.Append('.').ToString();
+            return s.ToString();
         }
 
         public IEnumerable<byte> ToBytes()

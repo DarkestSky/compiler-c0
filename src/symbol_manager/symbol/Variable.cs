@@ -9,6 +9,8 @@ namespace compiler_c0.symbol_manager.symbol
     public class Variable : Symbol
     {
         private readonly byte _isConst;
+
+        private bool _initialed = false;
         public ValueType ValueType { get; set; }
         private byte[] _value;
 
@@ -19,6 +21,13 @@ namespace compiler_c0.symbol_manager.symbol
         }
 
         public bool IsConst => _isConst == 1;
+
+        public bool Initialed => _initialed;
+
+        public void Initial()
+        {
+            _initialed = true;
+        }
 
         public void SetValue(string v)
         {

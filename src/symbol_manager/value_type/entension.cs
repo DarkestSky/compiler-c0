@@ -10,7 +10,7 @@ namespace compiler_c0.symbol_manager.value_type
             return (string) t.Value switch
             {
                 "int"    => ValueType.Int,
-                "double" => ValueType.Double,
+                "double" => ValueType.Float,
                 "void"   => ValueType.Void,
                 _ => throw new Exception("undefined value type")
             };

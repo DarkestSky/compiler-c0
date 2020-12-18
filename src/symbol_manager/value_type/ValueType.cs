@@ -4,7 +4,7 @@ namespace compiler_c0.symbol_manager.value_type
     {
         Void,
         Int,
-        Double,
+        Float,
         String,
     }
 }

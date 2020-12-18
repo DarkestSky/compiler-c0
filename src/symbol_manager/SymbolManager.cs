@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using compiler_c0.instruction;
 using compiler_c0.symbol_manager.symbol;
 using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
 
@@ -70,7 +71,8 @@ namespace compiler_c0.symbol_manager
 
             CheckDuplicate(name);
             
-            // add name into global variable;
+            // add FuncName into global variable table
+            // FuncName will be linked when creating function
             var variable = NewVariable($"fun({name})", ValueType.String);
             variable.SetValue(name);
 
@@ -80,6 +82,17 @@ namespace compiler_c0.symbol_manager
             CurFunction = function;
 
             return function;
+        }
+
+        public void AddInstruction(Instruction instruction)
+        {
+            CurFunction.AddInstruction(instruction);
+        }
+
+        public void AddLoadAddressInstruction(Variable variable)
+        {
+            // todo globa or loca
+            CurFunction.AddInstruction(new Instruction(InstructionType.Globa, 0u));
         }
 
         public Param NewParam(string name)

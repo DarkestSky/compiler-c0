@@ -34,7 +34,7 @@ namespace compiler_c0.symbol_manager.symbol
                     returnSlot = 0;
                     break;
                 case ValueType.Int:
-                case ValueType.Double:
+                case ValueType.Float:
                 case ValueType.String:
                     returnSlot = 1;
                     break;

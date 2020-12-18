@@ -4,6 +4,7 @@ using compiler_c0.symbol_manager;
 using compiler_c0.tokenizer;
 using compiler_c0.tokenizer.token;
 using compiler_c0.tokenizer.token.extensions;
+using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
 
 namespace compiler_c0.analyser.sub_function.expression
 {
@@ -23,8 +24,7 @@ namespace compiler_c0.analyser.sub_function.expression
             ExpressionValue value = null;
             if (Tokenizer.PeekToken().Is(TokenType.Minus))
             {
-                Tokenizer.ExpectToken(TokenType.Minus);
-                value =  ParsePrimary();
+                value = AnalyseNegExpression();
             }
             else if (Tokenizer.PeekToken().Is(TokenType.LParen))
             {
@@ -40,7 +40,7 @@ namespace compiler_c0.analyser.sub_function.expression
             }
             else if (Tokenizer.PeekToken().IsLiteral())
             {
-                AnalyseLiteralExpression();
+                value = AnalyseLiteralExpression();
             }
             else
             {
@@ -70,11 +70,28 @@ namespace compiler_c0.analyser.sub_function.expression
             return lValue;
         }
 
+        public static ExpressionValue AnalyseNegExpression()
+        {
+            Tokenizer.ExpectToken(TokenType.Minus);
+            var value =  ParsePrimary();
+            switch (value.ValueType)
+            {
+                case ValueType.Int:
+                    SymbolManager.AddInstruction(new Instruction(InstructionType.NegI));
+                    break;
+                case ValueType.Float:
+                    SymbolManager.AddInstruction(new Instruction(InstructionType.NegF));
+                    break;
+            }
+            
+            return value;
+        }
+
         public static ExpressionValue AnalyseIdentExpression()
         {
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
 
-            return new ExpressionValue();
+            return new ExpressionValue(ValueType.Void);
         }
 
         public static ExpressionValue AnalyseCallExpression()
@@ -83,7 +100,7 @@ namespace compiler_c0.analyser.sub_function.expression
             Tokenizer.ExpectToken(TokenType.LParen);
             AnalyseCallParamList();
             Tokenizer.ExpectToken(TokenType.RParen);
-            return new ExpressionValue();
+            return new ExpressionValue(ValueType.Void);
         }
 
         private static void AnalyseCallParamList()
@@ -96,7 +113,7 @@ namespace compiler_c0.analyser.sub_function.expression
             }
         }
 
-        private static void AnalyseLiteralExpression()
+        private static ExpressionValue AnalyseLiteralExpression()
         {
             var token = Tokenizer.NextToken();
             switch (token.TokenType)
@@ -104,9 +121,11 @@ namespace compiler_c0.analyser.sub_function.expression
                 case TokenType.LiteralNumber:
                     SymbolManager.CurFunction.AddInstruction(
                         new Instruction(InstructionType.Push, (ulong) token.Value));
-                    break;
-                // todo
+                    return new ExpressionValue(ValueType.Int);
+                // todo other literal type
             }
+
+            throw new NotImplementedException();
         }
     }
 }

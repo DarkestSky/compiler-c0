@@ -2,6 +2,7 @@ using System;
 using compiler_c0.instruction;
 using compiler_c0.symbol_manager;
 using compiler_c0.tokenizer.token;
+using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
 
 namespace compiler_c0.analyser.sub_function.expression
 {
@@ -41,12 +42,37 @@ namespace compiler_c0.analyser.sub_function.expression
 
         private static ExpressionValue CombinePlus(ExpressionValue lValue, ExpressionValue rValue)
         {
-            SymbolManager.CurFunction.AddInstruction(new Instruction(InstructionType.AddI));
+            if (lValue.Is(ValueType.Int))
+            {
+                SymbolManager.AddInstruction(new Instruction(InstructionType.AddI));
+            }
+            else if (lValue.Is(ValueType.Float))
+            {
+                SymbolManager.AddInstruction(new Instruction(InstructionType.AddF));
+            }
+            else
+            {
+                throw new Exception($"invalid operator between {lValue.ValueType} and {rValue.ValueType}");
+            }
+            
             return lValue;
         }
         
         private static ExpressionValue CombineMinus(ExpressionValue lValue, ExpressionValue rValue)
         {
+            if (lValue.Is(ValueType.Int))
+            {
+                SymbolManager.AddInstruction(new Instruction(InstructionType.MulI));
+            }
+            else if (lValue.Is(ValueType.Float))
+            {
+                SymbolManager.AddInstruction(new Instruction(InstructionType.MulF));
+            }
+            else
+            {
+                throw new Exception($"invalid operator between {lValue.ValueType} and {rValue.ValueType}");
+            }
+            
             return lValue;
         }
         
