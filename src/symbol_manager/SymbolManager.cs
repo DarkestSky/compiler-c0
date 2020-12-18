@@ -14,6 +14,8 @@ namespace compiler_c0.symbol_manager
 
         private SymbolTable CurSymbolTable => _symbolTables.Last();
 
+        private GlobalSymbolTable GlobalSymbolTable => (GlobalSymbolTable) _symbolTables.First();
+
         private SymbolManager()
         {
             // put a global symbol table to the bottom
@@ -58,6 +60,10 @@ namespace compiler_c0.symbol_manager
             var variable = new Variable(type, true);
 
             CurSymbolTable.AddSymbol(name, variable);
+            if (CurSymbolTable != GlobalSymbolTable)
+            {
+                CurFunction.AddVariable(variable);
+            }
 
             return variable;
         }
@@ -91,8 +97,31 @@ namespace compiler_c0.symbol_manager
 
         public void AddLoadAddressInstruction(Variable variable)
         {
-            // todo globa or loca
-            CurFunction.AddInstruction(new Instruction(InstructionType.Globa, 0u));
+            if (CurSymbolTable is GlobalSymbolTable)
+            {
+                var i = GlobalSymbolTable.FindVariable(variable);
+                if (i == -1)
+                    throw new Exception("variable not found");
+                CurFunction.AddInstruction(new Instruction(InstructionType.Globa, (uint) i));
+            }
+            else
+            {
+                // todo
+                // priority: loc > param > global;
+                int i;
+                if ((i = CurFunction.FindVariable(variable)) != -1)
+                {
+                    CurFunction.AddInstruction(new Instruction(InstructionType.Loca, (uint) i));
+                }
+                else if((i=GlobalSymbolTable.FindVariable(variable)) != -1)
+                {
+                    CurFunction.AddInstruction(new Instruction(InstructionType.Globa, (uint) i));
+                }
+                else
+                {
+                    throw new Exception("variable not found");
+                }
+            }
         }
 
         public Param NewParam(string name)
@@ -125,16 +154,22 @@ namespace compiler_c0.symbol_manager
 
             // check main()
             if (CurSymbolTable is GlobalSymbolTable globalSymbolTable
-                && globalSymbolTable.FindFunction("main") == -1)
+                && globalSymbolTable.FindFunction("main", out _) == null)
             {
                 throw new Exception("no main function found");
             }
             
             // add call main into _start_ function
-            
+            var fun = GlobalSymbolTable.FindFunction("_start_", out _);
+            var funMain = GlobalSymbolTable.FindFunction("main", out _);
+            GlobalSymbolTable.FindVariable("fun(main)", out var offset);
+            fun.AddInstruction(new Instruction(InstructionType.StackAlloc, funMain.returnSlot));
+            fun.AddInstruction(new Instruction(InstructionType.Callname, (uint) offset));
             
             // output binary code
             Console.Write(((GlobalSymbolTable)CurSymbolTable).ToString());
+            
+            // todo generate binary code
         }
     }
 }

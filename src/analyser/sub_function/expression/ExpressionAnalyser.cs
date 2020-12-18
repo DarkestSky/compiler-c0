@@ -122,6 +122,10 @@ namespace compiler_c0.analyser.sub_function.expression
                     SymbolManager.CurFunction.AddInstruction(
                         new Instruction(InstructionType.Push, (ulong) token.Value));
                     return new ExpressionValue(ValueType.Int);
+                case TokenType.LiteralDouble:
+                    SymbolManager.CurFunction.AddInstruction(
+                        new Instruction(InstructionType.Push, (ulong) token.Value));
+                    return new ExpressionValue(ValueType.Float);
                 // todo other literal type
             }
 

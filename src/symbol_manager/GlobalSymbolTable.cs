@@ -6,15 +6,15 @@ using compiler_c0.symbol_manager.symbol;
 
 namespace compiler_c0.symbol_manager
 {
-    public class GlobalSymbolTable: SymbolTable
+    public class GlobalSymbolTable : SymbolTable
     {
-        private readonly List<KeyValuePair<string, Variable>> Variables = new();
+        // private readonly List<KeyValuePair<string, Variable>> Variables = new();
+
+        // ReSharper disable once InconsistentNaming
         private readonly List<KeyValuePair<string, Function>> Functions = new();
-        
+
         public override void AddSymbol(string name, Symbol symbol)
         {
-            Symbols.Add(name, symbol);
-            
             if (symbol is Variable variable)
             {
                 Variables.Add(new KeyValuePair<string, Variable>(name, variable));
@@ -30,11 +30,11 @@ namespace compiler_c0.symbol_manager
             }
         }
 
-        public int FindVariable(string name)
+        public int FindVariable(Variable variable)
         {
-            for (var i = 0; i < Variables.Count; i++)
+            for (var i = 0; i < Variables.Capacity; i++)
             {
-                if (Variables[i].Key == name)
+                if (Variables[i].Value == variable)
                 {
                     return i;
                 }
@@ -43,17 +43,24 @@ namespace compiler_c0.symbol_manager
             return -1;
         }
 
-        public int FindFunction(string name)
+        public Function FindFunction(string name, out int offset)
         {
             for (var i = 0; i < Functions.Count; i++)
             {
                 if (Functions[i].Key == name)
                 {
-                    return i;
+                    offset = i;
+                    return Functions[i].Value;
                 }
             }
 
-            return -1;
+            offset = -1;
+            return null;
+        }
+
+        public override Symbol FindSymbol(string name)
+        {
+            return (Symbol) FindVariable(name, out _) ?? FindFunction(name, out _);
         }
 
         public override string ToString()
@@ -79,7 +86,7 @@ namespace compiler_c0.symbol_manager
 
         public IEnumerable<byte> ToBytes()
         {
-            var head =  Enumerable.Empty<byte>()
+            var head = Enumerable.Empty<byte>()
                 .Concat(BitConverter.GetBytes(0x72303b3Eu).Reverse())
                 .Concat(BitConverter.GetBytes(1).Reverse());
 

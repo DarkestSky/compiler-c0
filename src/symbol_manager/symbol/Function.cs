@@ -20,11 +20,28 @@ namespace compiler_c0.symbol_manager.symbol
 
         private List<Instruction> Instructions = new();
 
-        public Function()
+        private readonly List<Variable> _localVariables = new();
+
+        private readonly List<Variable> _params = new();
+
+        public int FindVariable(Variable variable)
         {
-            
+            for (var i = 0; i < _localVariables.Count; i++)
+            {
+                if (variable == _localVariables[i])
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
 
+        public void AddVariable(Variable variable)
+        {
+            _localVariables.Add(variable);
+        }
+        
         public void SetReturnType(ValueType valueType)
         {
             ReturnType = valueType;
