@@ -74,20 +74,24 @@ namespace compiler_c0.analyser.sub_function
             Tokenizer.ExpectToken(TokenType.Colon);
             var type = Tokenizer.ExpectToken(TokenType.Identifier);
             var variable = SymbolManager.NewVariable((string) ident.Value, type.ToValueType());
-            Tokenizer.ExpectToken(TokenType.Assign);
-            
-            // load symbol address
-            SymbolManager.AddLoadAddressInstruction(variable);
-            
-            var e = ExpressionAnalyser.AnalyseExpression();
-            
-            if (variable.ValueType != e.ValueType)
+            if (Tokenizer.PeekToken().Is(TokenType.Assign))
             {
-                throw new Exception("value type not match");
+                Tokenizer.ExpectToken(TokenType.Assign);
+
+                // load symbol address
+                SymbolManager.AddLoadAddressInstruction(variable);
+
+                var e = ExpressionAnalyser.AnalyseExpression();
+
+                if (variable.ValueType != e.ValueType)
+                {
+                    throw new Exception("value type not match");
+                }
+
+                SymbolManager.CurFunction.AddInstruction(new Instruction(InstructionType.Store64));
+                variable.Initial();
             }
-            SymbolManager.CurFunction.AddInstruction(new Instruction(InstructionType.Store64));
-            variable.Initial();
-            
+
             Tokenizer.ExpectToken(TokenType.Semicolon);
         }
 
