@@ -25,20 +25,6 @@ namespace compiler_c0.symbol_manager.symbol
 
         private readonly List<Variable> _localVariables = new();
 
-        private readonly List<Variable> _params = new();
-
-        public int FindVariable(Variable variable)
-        {
-            for (var i = 0; i < _localVariables.Count; i++)
-            {
-                if (variable == _localVariables[i])
-                {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
 
         public bool CheckParamList(List<ValueType> paramList)
         {
@@ -74,6 +60,8 @@ namespace compiler_c0.symbol_manager.symbol
 
         public void AddParam(ValueType type)
         {
+            Params.Add(type);
+            
             switch (type)
             {
                 case ValueType.Int:

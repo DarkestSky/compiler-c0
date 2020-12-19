@@ -43,7 +43,7 @@ namespace compiler_c0.analyser.sub_function.expression
                 // classify whether symbol is a FUNCTION or a Variable
                 if (symbol is Function)
                     value = AnalyseCallExpression();
-                else if (symbol is Variable)
+                else if (symbol is Variable || symbol is Param)
                     value = AnalyseIdentExpression();
                 else
                     throw new Exception("symbol not found");
@@ -100,13 +100,17 @@ namespace compiler_c0.analyser.sub_function.expression
         public static ExpressionValue AnalyseIdentExpression()
         {
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
-            var variable = (Variable) SymbolManager.FindSymbol((string) ident.Value);
-            SymbolManager.AddLoadAddressInstruction(variable);
+            var symbol = SymbolManager.FindSymbol((string) ident.Value);
+            SymbolManager.AddLoadAddressInstruction(symbol);
             
             if (!Tokenizer.PeekToken().Is(TokenType.Assign))
                 SymbolManager.AddInstruction(new Instruction(InstructionType.Load64));
 
-            return new ExpressionValue(variable.ValueType);
+            if (symbol is Variable variable)
+                return new ExpressionValue(variable.ValueType);
+            if (symbol is Param param)
+                return new ExpressionValue(param.ValueType);
+            throw new Exception("unreachable code");
         }
 
         private static ExpressionValue AnalyseCallExpression()

@@ -60,9 +60,7 @@ namespace compiler_c0.analyser.sub_function.statement
             var type = Tokenizer.ExpectToken(TokenType.Identifier);
 
             
-            var param = SymbolManager.NewParam((string) ident.Value);
-            param.IsConst = isConst;
-            param.ValueType = type.ToValueType();
+            var param = SymbolManager.NewParam((string) ident.Value, type.ToValueType(), isConst);
         }
     }
 }

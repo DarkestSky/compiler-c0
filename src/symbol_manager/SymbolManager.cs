@@ -98,16 +98,16 @@ namespace compiler_c0.symbol_manager
             CurFunction.AddInstruction(instruction);
         }
 
-        public void AddLoadAddressInstruction(Variable variable)
+        public void AddLoadAddressInstruction(Symbol symbol)
         {
             if (CurSymbolTable is GlobalSymbolTable)
             {
-                var i = GlobalSymbolTable.FindVariable(variable);
+                var i = GlobalSymbolTable.FindVariable((Variable) symbol);
                 if (i == -1)
                     throw new Exception("variable not found");
                 CurFunction.AddInstruction(new Instruction(InstructionType.Globa, (uint) i));
             }
-            else
+            else if (symbol is Variable variable)
             {
                 // todo
                 // priority: loc > param > global;
@@ -125,12 +125,24 @@ namespace compiler_c0.symbol_manager
                     throw new Exception("variable not found");
                 }
             }
+            else if (symbol is Param param)
+            {
+                int i;
+                if ((i = CurSymbolTable.FindParam(param)) != -1)
+                {
+                    CurFunction.AddInstruction(new Instruction(InstructionType.Arga, (uint) i));
+                }
+                else
+                {
+                    throw new Exception("variable not found");
+                }
+            }
         }
 
-        public Param NewParam(string name)
+        public Param NewParam(string name, ValueType type, bool isConst)
         {
             CheckDuplicate(name);
-            var param = new Param();
+            var param = new Param(type, isConst);
 
             CurSymbolTable.AddSymbol(name, param);
             return param;
