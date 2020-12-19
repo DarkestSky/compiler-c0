@@ -24,7 +24,7 @@ namespace compiler_c0.analyser.sub_function.expression
 
         private static ExpressionValue ParsePrimary()
         {
-            ExpressionValue value = null;
+            ExpressionValue value;
             if (Tokenizer.PeekToken().Is(TokenType.Minus))
             {
                 value = AnalyseNegExpression();
@@ -32,8 +32,8 @@ namespace compiler_c0.analyser.sub_function.expression
             else if (Tokenizer.PeekToken().Is(TokenType.LParen))
             {
                 Tokenizer.ExpectToken(TokenType.LParen);
-                value = ParsePrimary();
-                Tokenizer.ExpectToken(TokenType.LParen);
+                value = AnalyseExpression();
+                Tokenizer.ExpectToken(TokenType.RParen);
             }
             else if (Tokenizer.PeekToken().Is(TokenType.Identifier))
             {
