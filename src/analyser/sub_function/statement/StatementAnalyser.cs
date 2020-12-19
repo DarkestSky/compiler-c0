@@ -133,12 +133,13 @@ namespace compiler_c0.analyser.sub_function.statement
             var condition = ExpressionAnalyser.AnalyseExpression();
             if (condition.ValueType != ValueType.Int)
                 throw new Exception("invalid condition expression");
-            var brTrue = SymbolManager.AddInstruction(new Instruction(InstructionType.BrTrue, 0));
+            SymbolManager.AddInstruction(new Instruction(InstructionType.BrTrue, 1));
+            var brForward = SymbolManager.AddInstruction(new Instruction(InstructionType.Br, 0));
             AnalyseBlockStatement(true);
             
             var brBack = SymbolManager.AddInstruction(new Instruction(InstructionType.Br, 0));
             brBack.SetParam(SymbolManager.GetInstructionOffset(brBack, brStart));
-            brTrue.SetParam(SymbolManager.GetInstructionOffset(brTrue, brBack) + 1);
+            brForward.SetParam(SymbolManager.GetInstructionOffset(brForward, brBack) + 1);
         }
 
         /// <summary>

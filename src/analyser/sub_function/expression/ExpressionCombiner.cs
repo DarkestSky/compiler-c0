@@ -123,32 +123,54 @@ namespace compiler_c0.analyser.sub_function.expression
         
         private static ExpressionValue CombineEq(ExpressionValue lValue, ExpressionValue rValue)
         {
-            return lValue;
+            CombineNeq(lValue, rValue);
+            SymbolManager.AddInstruction(new Instruction(InstructionType.Not));
+
+            return new ExpressionValue(ValueType.Int);
         }
         
         private static ExpressionValue CombineNeq(ExpressionValue lValue, ExpressionValue rValue)
         {
-            return lValue;
+            if (lValue.Is(ValueType.Int))
+                SymbolManager.AddInstruction(new Instruction(InstructionType.CmpI));
+            else if (lValue.Is(ValueType.Float))
+                SymbolManager.AddInstruction(new Instruction(InstructionType.CmpF));
+            else
+                throw new Exception($"invalid operator between {lValue.ValueType} and {rValue.ValueType}");
+
+            return new ExpressionValue(ValueType.Int);
         }
         
         private static ExpressionValue CombineLt(ExpressionValue lValue, ExpressionValue rValue)
         {
-            return lValue;
+            CombineNeq(lValue, rValue);
+            SymbolManager.AddInstruction(new Instruction(InstructionType.SetLt));
+            
+            return new ExpressionValue(ValueType.Int);
         }
         
         private static ExpressionValue CombineLe(ExpressionValue lValue, ExpressionValue rValue)
         {
-            return lValue;
+            CombineGt(lValue, rValue);
+            SymbolManager.AddInstruction(new Instruction(InstructionType.Not));
+
+            return new ExpressionValue(ValueType.Int);
         }
         
         private static ExpressionValue CombineGt(ExpressionValue lValue, ExpressionValue rValue)
         {
-            return lValue;
+            CombineNeq(lValue, rValue);
+            SymbolManager.AddInstruction(new Instruction(InstructionType.SetGt));
+            
+            return new ExpressionValue(ValueType.Int);
         }
         
         private static ExpressionValue CombineGe(ExpressionValue lValue, ExpressionValue rValue)
         {
-            return lValue;
+            CombineLt(lValue, rValue);
+            SymbolManager.AddInstruction(new Instruction(InstructionType.Not));
+
+            return new ExpressionValue(ValueType.Int);
         }
     }
 }

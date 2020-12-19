@@ -8,7 +8,7 @@ namespace compiler_c0.tokenizer.token.extensions
         private static readonly HashSet<TokenType> BinaryOperatorSet = new()
         {
             TokenType.Plus, TokenType.Minus, TokenType.Mul, TokenType.Div, TokenType.Assign,
-            TokenType.Eq, TokenType.Neq, TokenType.Lt, TokenType.Gt, TokenType.Ge
+            TokenType.Eq, TokenType.Neq, TokenType.Lt, TokenType.Le, TokenType.Gt, TokenType.Ge
         };
         
         public static bool IsBinaryOperator(this Token t)
@@ -37,6 +37,7 @@ namespace compiler_c0.tokenizer.token.extensions
                 TokenType.Eq     => 2,
                 TokenType.Neq    => 2,
                 TokenType.Lt     => 2,
+                TokenType.Le     => 2,
                 TokenType.Gt     => 2,
                 TokenType.Ge     => 2,
                 _ => throw new Exception("cannot get opg-priority of a non-binary-operator")
