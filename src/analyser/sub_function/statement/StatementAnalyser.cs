@@ -1,13 +1,13 @@
 using System;
-using compiler_c0.tokenizer;
-using compiler_c0.tokenizer.token;
-using compiler_c0.analyser.sub_function;
 using compiler_c0.analyser.sub_function.expression;
 using compiler_c0.instruction;
 using compiler_c0.symbol_manager;
 using compiler_c0.symbol_manager.value_type;
+using compiler_c0.tokenizer;
+using compiler_c0.tokenizer.token;
+using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
 
-namespace compiler_c0.analyser.sub_function
+namespace compiler_c0.analyser.sub_function.statement
 {
     public static class StatementAnalyser
     {
@@ -150,8 +150,24 @@ namespace compiler_c0.analyser.sub_function
         public static void AnalyseReturnStatement()
         {
             Tokenizer.ExpectToken(TokenType.Return);
-            ExpressionAnalyser.AnalyseExpression();
+            if (SymbolManager.CurFunction.ReturnType != ValueType.Void)
+            {
+                var symbol = SymbolManager.FindSymbol("return()");
+                SymbolManager.AddLoadAddressInstruction(symbol);
+            }
+
+            var e = ExpressionAnalyser.AnalyseExpression();
+            if (e.ValueType != SymbolManager.CurFunction.ReturnType)
+            {
+                throw new Exception("unexpected return value");
+            }
+
+            if (e.ValueType != ValueType.Void)
+            {
+                SymbolManager.AddInstruction(new Instruction(InstructionType.Store64));
+            }
             Tokenizer.ExpectToken(TokenType.Semicolon);
+            SymbolManager.AddInstruction(new Instruction(InstructionType.Ret));
         }
 
         public static void AnalyseEmptyStatement()

@@ -148,6 +148,11 @@ namespace compiler_c0.symbol_manager
             return param;
         }
 
+        public void SetReturnParam(ValueType type)
+        {
+            CurSymbolTable.SetReturnParam(type);
+        }
+
         public void CreateSymbolTable()
         {
             _symbolTables.Add(new SymbolTable());

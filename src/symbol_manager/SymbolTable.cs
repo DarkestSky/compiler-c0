@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using compiler_c0.symbol_manager.symbol;
+using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
 
 namespace compiler_c0.symbol_manager
 {
@@ -30,6 +31,11 @@ namespace compiler_c0.symbol_manager
             {
                 throw new Exception("unexpected symbol type in common symbol table");
             }
+        }
+
+        public void SetReturnParam(ValueType type)
+        {
+            Params.Insert(0, new KeyValuePair<string, Param>("return()", new Param(type, false)));
         }
 
         /// <summary>

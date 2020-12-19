@@ -21,6 +21,11 @@ namespace compiler_c0.symbol_manager.symbol
             }
             
             Params.AddRange(paramType);
+
+            if (ReturnType != ValueType.Void)
+            {
+                Params.Insert(0, ReturnType);
+            }
         }
     }
 }

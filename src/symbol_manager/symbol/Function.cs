@@ -9,6 +9,8 @@ namespace compiler_c0.symbol_manager.symbol
 {
     public class Function : Symbol
     {
+        private static readonly SymbolManager SymbolManager = SymbolManager.Instance;
+        
         public uint Name { get; set; }
 
         public uint ReturnSlot { get; protected set; }
@@ -28,12 +30,15 @@ namespace compiler_c0.symbol_manager.symbol
 
         public bool CheckParamList(List<ValueType> paramList)
         {
-            if (paramList.Count != Params.Count)
+            // first slot may be reserved for return slot;
+            var returnSlot = ReturnType == ValueType.Void ? 0 : 1;
+            
+            if (paramList.Count != Params.Count - returnSlot)
                 return false;
 
             for (var i = 0; i < paramList.Count; i++)
             {
-                if (paramList[i] != Params[i])
+                if (paramList[i] != Params[i + returnSlot])
                     return false;
             }
 
@@ -83,8 +88,10 @@ namespace compiler_c0.symbol_manager.symbol
                     break;
                 case ValueType.Int:
                 case ValueType.Float:
-                case ValueType.String:
                     ReturnSlot = 1;
+                    SymbolManager.SetReturnParam(valueType);
+                    ParamSlots += 1;
+                    Params.Insert(0, ReturnType);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null);
