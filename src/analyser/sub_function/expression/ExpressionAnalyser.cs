@@ -37,16 +37,7 @@ namespace compiler_c0.analyser.sub_function.expression
             }
             else if (Tokenizer.PeekToken().Is(TokenType.Identifier))
             {
-                var token = Tokenizer.PeekToken();
-                var symbol = SymbolManager.FindSymbol((string) token.Value);
-                
-                // classify whether symbol is a FUNCTION or a Variable
-                if (symbol is Function)
-                    value = AnalyseCallExpression();
-                else if (symbol is Variable || symbol is Param)
-                    value = AnalyseIdentExpression();
-                else
-                    throw new Exception("symbol not found");
+                value = AnalyseIdentOrCallExpression();
             }
             else if (Tokenizer.PeekToken().IsLiteral())
             {
@@ -97,6 +88,19 @@ namespace compiler_c0.analyser.sub_function.expression
             return value;
         }
 
+        private static ExpressionValue AnalyseIdentOrCallExpression()
+        {
+            var token = Tokenizer.PeekToken();
+            var symbol = SymbolManager.FindSymbol((string) token.Value);
+
+            // classify whether symbol is a FUNCTION or a Variable
+            if (symbol is Function)
+                return AnalyseCallExpression();
+            if (symbol is Variable || symbol is Param)
+                return AnalyseIdentExpression();
+            throw new Exception("symbol not found");
+        }
+        
         public static ExpressionValue AnalyseIdentExpression()
         {
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
@@ -165,7 +169,8 @@ namespace compiler_c0.analyser.sub_function.expression
             }
             else if (Tokenizer.PeekToken().Is(TokenType.Identifier))
             {
-                valueTypes.Add(AnalyseIdentExpression().ValueType);
+                // todo: maybe this is a function
+                valueTypes.Add(AnalyseIdentOrCallExpression().ValueType);
             }
         }
 
