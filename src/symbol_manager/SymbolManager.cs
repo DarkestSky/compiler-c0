@@ -93,11 +93,17 @@ namespace compiler_c0.symbol_manager
             return function;
         }
 
-        public void AddInstruction(Instruction instruction)
+        public Instruction AddInstruction(Instruction instruction)
         {
             CurFunction.AddInstruction(instruction);
+            return instruction;
         }
 
+        public int GetInstructionOffset(Instruction instruction1, Instruction instruction2)
+        {
+            return CurFunction.GetInstructionOffset(instruction1, instruction2);
+        }
+        
         public void AddLoadAddressInstruction(Symbol symbol)
         {
             if (CurSymbolTable is GlobalSymbolTable)

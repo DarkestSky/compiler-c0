@@ -25,8 +25,6 @@ namespace compiler_c0.symbol_manager.symbol
 
         private readonly List<Instruction> _instructions = new();
 
-        private readonly List<Variable> _localVariables = new();
-
 
         public bool CheckParamList(List<ValueType> paramList)
         {
@@ -103,6 +101,13 @@ namespace compiler_c0.symbol_manager.symbol
             _instructions.Add(instruction);
         }
 
+        public int GetInstructionOffset(Instruction instruction1, Instruction instruction2)
+        {
+            return _instructions.FindIndex(i => i == instruction2)
+                   - _instructions.FindIndex(i => i == instruction1)
+                   - 1;
+        }
+        
         public override string ToString()
         {
             var sb = new StringBuilder();

@@ -26,6 +26,11 @@ namespace compiler_c0.instruction
         public Instruction(InstructionType type, uint param)
         {
             _type = type;
+            SetParam(param);
+        }
+
+        public void SetParam(uint param)
+        {
             if ((_valueSize = _type.GetParamSize()) != 1)
             {
                 throw new Exception("not matched instruction type");
@@ -38,9 +43,16 @@ namespace compiler_c0.instruction
         {
         }
 
+        public void SetParam(int param) => SetParam((uint) param);
+
         public Instruction(InstructionType type, ulong param)
         {
             _type = type;
+            SetParam(param);
+        }
+
+        public void SetParam(ulong param)
+        {
             if ((_valueSize = _type.GetParamSize()) != 2)
             {
                 throw new Exception("not matched instruction type");
