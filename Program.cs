@@ -1,4 +1,5 @@
-﻿using compiler_c0.analyser;
+﻿using System;
+using compiler_c0.analyser;
 using compiler_c0.global_config;
 using compiler_c0.symbol_manager;
 
@@ -15,9 +16,17 @@ namespace compiler_c0
             globalConfig.OutputFilePath = args[1];
 
             var analyser = Analyser.Instance;
-            
-            analyser.Analyse();
-            symbolManager.Generator();
+
+            try
+            {
+                analyser.Analyse();
+                symbolManager.Generator();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Environment.ExitCode = 1;
+            }
         }
     }
 }
