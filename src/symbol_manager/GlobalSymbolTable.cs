@@ -49,9 +49,9 @@ namespace compiler_c0.symbol_manager
             return Variables.Count - 1;
         }
 
-        public int FindVariable(Variable variable)
+        public new int FindVariable(Variable variable)
         {
-            for (var i = 0; i < Variables.Capacity; i++)
+            for (var i = 0; i < Variables.Count; i++)
             {
                 if (Variables[i].Value == variable)
                 {

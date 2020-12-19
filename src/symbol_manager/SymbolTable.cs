@@ -8,12 +8,14 @@ namespace compiler_c0.symbol_manager
     public class SymbolTable
     {
         protected readonly List<KeyValuePair<string, Variable>> Variables = new();
+        private static readonly SymbolManager SymbolManager = SymbolManager.Instance;
 
         public virtual void AddSymbol(string name, Symbol symbol)
         {
             if (symbol is Variable variable)
             {
                 Variables.Add(new KeyValuePair<string, Variable>(name, variable));
+                SymbolManager.CurFunction.AddVariable(variable.ValueType);
             }
             else
             {
@@ -44,6 +46,19 @@ namespace compiler_c0.symbol_manager
 
             offset = -1;
             return null;
+        }
+        
+        public int FindVariable(Variable variable)
+        {
+            for (var i = 0; i < Variables.Count; i++)
+            {
+                if (Variables[i].Value == variable)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
     }
 }

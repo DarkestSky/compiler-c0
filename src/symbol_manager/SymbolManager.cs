@@ -67,10 +67,6 @@ namespace compiler_c0.symbol_manager
             var variable = new Variable(type, true);
 
             CurSymbolTable.AddSymbol(name, variable);
-            if (CurSymbolTable != GlobalSymbolTable)
-            {
-                CurFunction.AddVariable(variable);
-            }
 
             return variable;
         }
@@ -116,7 +112,7 @@ namespace compiler_c0.symbol_manager
                 // todo
                 // priority: loc > param > global;
                 int i;
-                if ((i = CurFunction.FindVariable(variable)) != -1)
+                if ((i = CurSymbolTable.FindVariable(variable)) != -1)
                 {
                     CurFunction.AddInstruction(new Instruction(InstructionType.Loca, (uint) i));
                 }

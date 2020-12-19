@@ -11,15 +11,15 @@ namespace compiler_c0.symbol_manager.symbol
     {
         public uint Name { get; set; }
 
-        public uint ReturnSlot { get; set; }
-        
+        public uint ReturnSlot { get; protected set; }
+
         public ValueType ReturnType { get; set; }
 
-        private uint param_slots { get; set; }
+        public uint ParamSlots { get; protected set; }
 
-        private uint loc_slots { get; set; }
+        public uint LocSlots { get; protected set; }
 
-        public readonly List<ValueType> Params = new List<ValueType>();
+        public readonly List<ValueType> Params = new();
 
         private readonly List<Instruction> _instructions = new();
 
@@ -54,9 +54,35 @@ namespace compiler_c0.symbol_manager.symbol
             return true;
         }
 
-        public void AddVariable(Variable variable)
+        /// <summary>
+        /// update loc_slot
+        /// </summary>
+        /// <param name="type"></param>
+        /// <exception cref="Exception"></exception>
+        public void AddVariable(ValueType type)
         {
-            _localVariables.Add(variable);
+            switch (type)
+            {
+                case ValueType.Int:
+                case ValueType.Float:
+                    LocSlots += 1;
+                    break;
+                default:
+                    throw new Exception("invalid variable type");
+            }
+        }
+
+        public void AddParam(ValueType type)
+        {
+            switch (type)
+            {
+                case ValueType.Int:
+                case ValueType.Float:
+                    ParamSlots += 1;
+                    break;
+                default:
+                    throw new Exception("invalid variable type");
+            }
         }
         
         public void SetReturnType(ValueType valueType)
@@ -88,8 +114,8 @@ namespace compiler_c0.symbol_manager.symbol
             sb.AppendLine("\tFunction:");
             sb.AppendLine($"\t\tName: {Name}");
             sb.AppendLine($"\t\tReturnSlot: {ReturnSlot}");
-            sb.AppendLine($"\t\tParamSlot: {param_slots}");
-            sb.AppendLine($"\t\tLocSlot: {loc_slots}");
+            sb.AppendLine($"\t\tParamSlot: {ParamSlots}");
+            sb.AppendLine($"\t\tLocSlot: {LocSlots}");
 
             sb.AppendLine("\t\tInstructions:");
             foreach (var instruction in _instructions)
@@ -104,8 +130,8 @@ namespace compiler_c0.symbol_manager.symbol
         {
             var nameByte = BitConverter.GetBytes(Name).Reverse();
             var returnByte = BitConverter.GetBytes(ReturnSlot).Reverse();
-            var paramByte = BitConverter.GetBytes(param_slots).Reverse();
-            var locByte = BitConverter.GetBytes(loc_slots).Reverse();
+            var paramByte = BitConverter.GetBytes(ParamSlots).Reverse();
+            var locByte = BitConverter.GetBytes(LocSlots).Reverse();
 
             var bodyByte = BitConverter.GetBytes(_instructions.Count).Reverse();
             foreach (var instruction in _instructions)
