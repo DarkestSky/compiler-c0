@@ -18,6 +18,10 @@ namespace compiler_c0.symbol_manager.symbol
         {
             ValueType = type;
             _isConst = isConst ? 1 : 0;
+            if (ValueType == ValueType.Int || ValueType == ValueType.Float)
+            {
+                _value = new byte[8];
+            }
         }
 
         public bool IsConst => _isConst == 1;
@@ -46,8 +50,20 @@ namespace compiler_c0.symbol_manager.symbol
         
         public IEnumerable<byte> ToBytes()
         {
-            // todo string不需要reverse
-            return new[]{_isConst}.Concat(_value.Reverse());
+            var result = Enumerable.Empty<byte>();
+            result = result.Append(_isConst);
+
+            result = result.Concat(BitConverter.GetBytes(_value.Length).Reverse());
+            if (ValueType == ValueType.String)
+            {
+                result = result.Concat(_value);
+            }
+            else
+            {
+                result = result.Concat(_value.Reverse());
+            }
+            
+            return result;
         }
 
         public override string ToString()
@@ -57,7 +73,6 @@ namespace compiler_c0.symbol_manager.symbol
             sb.AppendLine($"\t\tIsConst: {_isConst}");
             sb.AppendLine($"\t\tValueType: {ValueType}");
             
-            // todo output value
             switch (ValueType)
             {
                 case ValueType.String:

@@ -16,6 +16,7 @@
           </e>
         </e>
       </e>
+      <e p="output.o0" t="Include" />
       <e p="packages" t="ExcludeRecursive" />
       <e p="Program.cs" t="Include" />
       <e p="src" t="Include">

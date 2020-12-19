@@ -65,6 +65,7 @@ namespace compiler_c0.instruction.extension
             InstructionType.Shrl,
             InstructionType.SetLt,
             InstructionType.SetGt,
+            InstructionType.Ret,
             InstructionType.ScanI,
             InstructionType.ScanC,
             InstructionType.ScanF,
@@ -87,7 +88,6 @@ namespace compiler_c0.instruction.extension
             InstructionType.BrFalse,
             InstructionType.BrTrue,
             InstructionType.Call,
-            InstructionType.Ret,
             InstructionType.Callname,
         };
 

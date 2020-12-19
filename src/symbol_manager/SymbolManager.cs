@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using compiler_c0.global_config;
 using compiler_c0.instruction;
 using compiler_c0.symbol_manager.symbol;
 using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
@@ -10,6 +12,8 @@ namespace compiler_c0.symbol_manager
 {
     public class SymbolManager
     {
+        private readonly GlobalConfig GlobalConfig = GlobalConfig.Instance;
+        
         private readonly List<SymbolTable> _symbolTables = new();
 
         private SymbolTable CurSymbolTable => _symbolTables.Last();
@@ -152,24 +156,25 @@ namespace compiler_c0.symbol_manager
                 throw new Exception("symbol manager error with root symbol table");
             }
 
-            // check main()
-            if (CurSymbolTable is GlobalSymbolTable globalSymbolTable
-                && globalSymbolTable.FindFunction("main", out _) == null)
-            {
-                throw new Exception("no main function found");
-            }
-            
             // add call main into _start_ function
             var fun = GlobalSymbolTable.FindFunction("_start_", out _);
             var funMain = GlobalSymbolTable.FindFunction("main", out _);
-            GlobalSymbolTable.FindVariable("fun(main)", out var offset);
+            GlobalSymbolTable.FindFunction("main", out var offset);
+            if (offset == -1)
+            {
+                throw new Exception("no main function found");
+            }
             fun.AddInstruction(new Instruction(InstructionType.StackAlloc, funMain.returnSlot));
-            fun.AddInstruction(new Instruction(InstructionType.Callname, (uint) offset));
+            fun.AddInstruction(new Instruction(InstructionType.Call, (uint) offset));
             
             // output binary code
             Console.Write(((GlobalSymbolTable)CurSymbolTable).ToString());
             
             // todo generate binary code
+            using (var writer = new BinaryWriter(File.Open(GlobalConfig.OutputFilePath, FileMode.Create)))
+            {
+                writer.Write(GlobalSymbolTable.ToBytes().ToArray());
+            }
         }
     }
 }

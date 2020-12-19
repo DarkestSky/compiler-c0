@@ -8,7 +8,7 @@ namespace compiler_c0.instruction
 {
     public class Instruction
     {
-        private InstructionType _type;
+        private readonly InstructionType _type;
         private int _valueSize;
         private byte[] _value;
 
@@ -64,7 +64,18 @@ namespace compiler_c0.instruction
 
         public IEnumerable<byte> ToBytes()
         {
-            return new[] {(byte) _type}.Concat(_value.Reverse());
+            var result = Enumerable.Empty<byte>();
+            result = result.Append((byte) _type);
+            
+            switch (_valueSize)
+            {
+                case 1:
+                case 2:
+                    result = result.Concat(_value.Reverse());
+                    break;
+            }
+
+            return result;
         }
     }
 }

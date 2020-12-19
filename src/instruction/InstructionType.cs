@@ -47,6 +47,8 @@ namespace compiler_c0.instruction
         Shrl = 0x38,
         SetLt = 0x39,
         SetGt = 0x3A,
+        
+        Ret = 0x49,
 
         ScanI = 0x50,
         ScanC = 0x51,
@@ -70,7 +72,6 @@ namespace compiler_c0.instruction
         BrFalse = 0x42,
         BrTrue = 0x43,
         Call = 0x48,
-        Ret = 0x49,
         Callname = 0x4A,
 
         //U64Param

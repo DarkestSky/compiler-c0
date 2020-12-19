@@ -71,8 +71,8 @@ namespace compiler_c0.symbol_manager.symbol
             sb.AppendLine("\tFunction:");
             sb.AppendLine($"\t\tName: {Name}");
             sb.AppendLine($"\t\tReturnSlot: {returnSlot}");
-            sb.AppendLine($"\t\tParamSlot:");
-            sb.AppendLine($"\t\tLocSlot:");
+            sb.AppendLine($"\t\tParamSlot: {param_slots}");
+            sb.AppendLine($"\t\tLocSlot: {loc_slots}");
 
             sb.AppendLine("\t\tInstructions:");
             foreach (var instruction in Instructions)
@@ -90,7 +90,7 @@ namespace compiler_c0.symbol_manager.symbol
             var paramByte = BitConverter.GetBytes(param_slots).Reverse();
             var locByte = BitConverter.GetBytes(loc_slots).Reverse();
 
-            var bodyByte = BitConverter.GetBytes(Instructions.Count).AsEnumerable();
+            var bodyByte = BitConverter.GetBytes(Instructions.Count).Reverse();
             foreach (var instruction in Instructions)
             {
                 bodyByte = bodyByte.Concat(instruction.ToBytes());

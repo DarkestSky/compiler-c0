@@ -1,4 +1,5 @@
 using System;
+using compiler_c0.instruction;
 using compiler_c0.symbol_manager;
 using compiler_c0.symbol_manager.symbol;
 using compiler_c0.symbol_manager.value_type;
@@ -27,7 +28,10 @@ namespace compiler_c0.analyser.sub_function.statement
             var returnType = Tokenizer.ExpectToken(TokenType.Identifier);
             funDef.SetReturnType(returnType.ToValueType());
             StatementAnalyser.AnalyseBlockStatement(false);
+            
+            SymbolManager.AddInstruction(new Instruction(InstructionType.Ret));
             SymbolManager.DeleteSymbolTable();
+            
         }
 
         private static void AnalyseParamList()
