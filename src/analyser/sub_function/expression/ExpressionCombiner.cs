@@ -117,6 +117,7 @@ namespace compiler_c0.analyser.sub_function.expression
         
         private static ExpressionValue CombineAssign(ExpressionValue lValue, ExpressionValue rValue)
         {
+            SymbolManager.AddInstruction(new Instruction(InstructionType.Store64));
             return new ExpressionValue(ValueType.Void);
         }
         
