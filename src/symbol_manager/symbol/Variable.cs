@@ -82,6 +82,8 @@ namespace compiler_c0.symbol_manager.symbol
                         sb.Append($" {b:X2}");
                     }
 
+                    sb.Append($" ({Encoding.Default.GetString(_value)})");
+                    
                     sb.AppendLine();
                     
                     break;

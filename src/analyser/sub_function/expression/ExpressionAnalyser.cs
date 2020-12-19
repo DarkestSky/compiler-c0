@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using compiler_c0.instruction;
 using compiler_c0.symbol_manager;
 using compiler_c0.symbol_manager.symbol;
@@ -37,7 +39,8 @@ namespace compiler_c0.analyser.sub_function.expression
             {
                 var token = Tokenizer.PeekToken();
                 var symbol = SymbolManager.FindSymbol((string) token.Value);
-
+                
+                // classify whether symbol is a FUNCTION or a Variable
                 if (symbol is Function)
                     value = AnalyseCallExpression();
                 else if (symbol is Variable)
@@ -99,27 +102,66 @@ namespace compiler_c0.analyser.sub_function.expression
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
             var variable = (Variable) SymbolManager.FindSymbol((string) ident.Value);
             SymbolManager.AddLoadAddressInstruction(variable);
-            SymbolManager.AddInstruction(new Instruction(InstructionType.Load64));
+            
+            if (!Tokenizer.PeekToken().Is(TokenType.Assign))
+                SymbolManager.AddInstruction(new Instruction(InstructionType.Load64));
 
             return new ExpressionValue(variable.ValueType);
         }
 
-        public static ExpressionValue AnalyseCallExpression()
+        private static ExpressionValue AnalyseCallExpression()
         {
-            var func = Tokenizer.ExpectToken(TokenType.Identifier);
+            var name = Tokenizer.ExpectToken(TokenType.Identifier);
             Tokenizer.ExpectToken(TokenType.LParen);
-            AnalyseCallParamList();
+            var func = (Function) SymbolManager.FindSymbol((string) name.Value);
+            SymbolManager.AddInstruction(new Instruction(InstructionType.StackAlloc, func.ReturnSlot));
+            
+            AnalyseCallParamList(func);
             Tokenizer.ExpectToken(TokenType.RParen);
-            return new ExpressionValue(ValueType.Void);
+
+            int offset;
+            if (func is LibFunction)
+            {
+                SymbolManager.GlobalSymbolTable.FindVariable($"lib({(string) name.Value})", out offset);
+            }
+            else
+            {
+                SymbolManager.GlobalSymbolTable.FindVariable($"fun({(string) name.Value})", out offset);
+            }
+
+            SymbolManager.AddInstruction(new Instruction(InstructionType.Callname, (uint) offset));
+
+            return new ExpressionValue(func.ReturnType);
         }
 
-        private static void AnalyseCallParamList()
+        private static void AnalyseCallParamList(Function func)
         {
-            Tokenizer.ExpectToken(TokenType.Identifier);
-            while (Tokenizer.PeekToken().Is(TokenType.Comma))
+            var l = new List<ValueType>();
+            if (!Tokenizer.PeekToken().Is(TokenType.RParen))
             {
-                Tokenizer.ExpectToken(TokenType.Comma);
-                Tokenizer.ExpectToken(TokenType.Identifier);
+                AnalyseCallParam(l);
+                while (Tokenizer.PeekToken().Is(TokenType.Comma))
+                {
+                    Tokenizer.ExpectToken(TokenType.Comma);
+                    AnalyseCallParam(l);
+                }
+            }
+
+            if (!func.CheckParamList(l))
+            {
+                throw new Exception("params not match");
+            }
+        }
+
+        private static void AnalyseCallParam(List<ValueType> valueTypes)
+        {
+            if (Tokenizer.PeekToken().IsLiteral())
+            {
+                valueTypes.Add(AnalyseLiteralExpression().ValueType);
+            }
+            else if (Tokenizer.PeekToken().Is(TokenType.Identifier))
+            {
+                valueTypes.Add(AnalyseIdentExpression().ValueType);
             }
         }
 
@@ -136,10 +178,13 @@ namespace compiler_c0.analyser.sub_function.expression
                     SymbolManager.CurFunction.AddInstruction(
                         new Instruction(InstructionType.Push, (ulong) token.Value));
                     return new ExpressionValue(ValueType.Float);
-                // todo other literal type
+                case TokenType.LiteralString:
+                    var i = SymbolManager.GlobalSymbolTable.NewGlobalString((string) token.Value);
+                    SymbolManager.AddInstruction(new Instruction(InstructionType.Push, (ulong) i));
+                    return new ExpressionValue(ValueType.Int);
             }
 
-            throw new NotImplementedException();
+            throw new Exception("unreachable code");
         }
     }
 }

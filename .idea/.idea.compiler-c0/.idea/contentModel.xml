@@ -55,6 +55,7 @@
           <e p="GlobalSymbolTable.cs" t="Include" />
           <e p="symbol" t="Include">
             <e p="Function.cs" t="Include" />
+            <e p="LibFunction.cs" t="Include" />
             <e p="Param.cs" t="Include" />
             <e p="Symbol.cs" t="Include" />
             <e p="Variable.cs" t="Include" />

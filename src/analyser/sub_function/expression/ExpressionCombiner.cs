@@ -11,6 +11,9 @@ namespace compiler_c0.analyser.sub_function.expression
         private static readonly SymbolManager SymbolManager = SymbolManager.Instance;
         public static ExpressionValue Combine(ExpressionValue lValue, Token token, ExpressionValue rValue)
         {
+            if (lValue.ValueType != rValue.ValueType)
+                throw new Exception("unmatched expression type");
+
             switch (token.TokenType)
             {
                 case TokenType.Plus:
@@ -62,6 +65,24 @@ namespace compiler_c0.analyser.sub_function.expression
         {
             if (lValue.Is(ValueType.Int))
             {
+                SymbolManager.AddInstruction(new Instruction(InstructionType.SubI));
+            }
+            else if (lValue.Is(ValueType.Float))
+            {
+                SymbolManager.AddInstruction(new Instruction(InstructionType.SubF));
+            }
+            else
+            {
+                throw new Exception($"invalid operator between {lValue.ValueType} and {rValue.ValueType}");
+            }
+            
+            return lValue;
+        }
+        
+        private static ExpressionValue CombineMul(ExpressionValue lValue, ExpressionValue rValue)
+        {
+            if (lValue.Is(ValueType.Int))
+            {
                 SymbolManager.AddInstruction(new Instruction(InstructionType.MulI));
             }
             else if (lValue.Is(ValueType.Float))
@@ -76,19 +97,27 @@ namespace compiler_c0.analyser.sub_function.expression
             return lValue;
         }
         
-        private static ExpressionValue CombineMul(ExpressionValue lValue, ExpressionValue rValue)
-        {
-            return lValue;
-        }
-        
         private static ExpressionValue CombineDiv(ExpressionValue lValue, ExpressionValue rValue)
         {
+            if (lValue.Is(ValueType.Int))
+            {
+                SymbolManager.AddInstruction(new Instruction(InstructionType.DivI));
+            }
+            else if (lValue.Is(ValueType.Float))
+            {
+                SymbolManager.AddInstruction(new Instruction(InstructionType.DivF));
+            }
+            else
+            {
+                throw new Exception($"invalid operator between {lValue.ValueType} and {rValue.ValueType}");
+            }
+            
             return lValue;
         }
         
         private static ExpressionValue CombineAssign(ExpressionValue lValue, ExpressionValue rValue)
         {
-            return lValue;
+            return new ExpressionValue(ValueType.Void);
         }
         
         private static ExpressionValue CombineEq(ExpressionValue lValue, ExpressionValue rValue)

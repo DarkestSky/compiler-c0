@@ -18,13 +18,16 @@ namespace compiler_c0.symbol_manager
 
         private SymbolTable CurSymbolTable => _symbolTables.Last();
 
-        private GlobalSymbolTable GlobalSymbolTable => (GlobalSymbolTable) _symbolTables.First();
+        public GlobalSymbolTable GlobalSymbolTable => (GlobalSymbolTable) _symbolTables.First();
 
         private SymbolManager()
         {
             // put a global symbol table to the bottom
             _symbolTables.Add(new GlobalSymbolTable());
 
+            // load standard lib
+            LoadLibFunctions();
+            
             // initial _start_ function
             NewFunction("_start_");
         }
@@ -149,6 +152,18 @@ namespace compiler_c0.symbol_manager
 
         public Function CurFunction { get; set; }
 
+        private void LoadLibFunctions()
+        {
+            GlobalSymbolTable.NewLibFunction("getint", ValueType.Int);
+            GlobalSymbolTable.NewLibFunction("getdouble", ValueType.Float);
+            GlobalSymbolTable.NewLibFunction("getchar", ValueType.Int);
+            GlobalSymbolTable.NewLibFunction("putint", ValueType.Void, ValueType.Int);
+            GlobalSymbolTable.NewLibFunction("putdouble", ValueType.Void, ValueType.Float);
+            GlobalSymbolTable.NewLibFunction("putchar", ValueType.Void, ValueType.Int);
+            GlobalSymbolTable.NewLibFunction("putstr", ValueType.Void, ValueType.Int);
+            GlobalSymbolTable.NewLibFunction("putln", ValueType.Void);
+        }
+
         public void Generator()
         {
             if (_symbolTables.Count != 1 || !(CurSymbolTable is GlobalSymbolTable))
@@ -159,22 +174,20 @@ namespace compiler_c0.symbol_manager
             // add call main into _start_ function
             var fun = GlobalSymbolTable.FindFunction("_start_", out _);
             var funMain = GlobalSymbolTable.FindFunction("main", out _);
-            GlobalSymbolTable.FindFunction("main", out var offset);
+            GlobalSymbolTable.FindVariable("fun(main)", out var offset);
             if (offset == -1)
             {
                 throw new Exception("no main function found");
             }
-            fun.AddInstruction(new Instruction(InstructionType.StackAlloc, funMain.returnSlot));
-            fun.AddInstruction(new Instruction(InstructionType.Call, (uint) offset));
+            fun.AddInstruction(new Instruction(InstructionType.StackAlloc, funMain.ReturnSlot));
+            fun.AddInstruction(new Instruction(InstructionType.Callname, (uint) offset));
             
             // output binary code
             Console.Write(((GlobalSymbolTable)CurSymbolTable).ToString());
             
-            // todo generate binary code
-            using (var writer = new BinaryWriter(File.Open(GlobalConfig.OutputFilePath, FileMode.Create)))
-            {
-                writer.Write(GlobalSymbolTable.ToBytes().ToArray());
-            }
+            // generate binary code
+            using var writer = new BinaryWriter(File.Open(GlobalConfig.OutputFilePath, FileMode.Create));
+            writer.Write(GlobalSymbolTable.ToBytes().ToArray());
         }
     }
 }

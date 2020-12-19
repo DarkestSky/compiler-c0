@@ -6,6 +6,8 @@ namespace compiler_c0.analyser.sub_function.expression
     public class ExpressionValue
     {
         public ValueType ValueType { get; set; }
+        
+        public bool IsAddress { get; set; }
 
         public ExpressionValue(ValueType t)
         {

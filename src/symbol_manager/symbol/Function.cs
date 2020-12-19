@@ -11,14 +11,17 @@ namespace compiler_c0.symbol_manager.symbol
     {
         public uint Name { get; set; }
 
-        public uint returnSlot { get; set; }
+        public uint ReturnSlot { get; set; }
+        
+        public ValueType ReturnType { get; set; }
 
         private uint param_slots { get; set; }
 
         private uint loc_slots { get; set; }
-        private ValueType ReturnType { get; set; }
 
-        private List<Instruction> Instructions = new();
+        public readonly List<ValueType> Params = new List<ValueType>();
+
+        private readonly List<Instruction> _instructions = new();
 
         private readonly List<Variable> _localVariables = new();
 
@@ -37,6 +40,20 @@ namespace compiler_c0.symbol_manager.symbol
             return -1;
         }
 
+        public bool CheckParamList(List<ValueType> paramList)
+        {
+            if (paramList.Count != Params.Count)
+                return false;
+
+            for (var i = 0; i < paramList.Count; i++)
+            {
+                if (paramList[i] != Params[i])
+                    return false;
+            }
+
+            return true;
+        }
+
         public void AddVariable(Variable variable)
         {
             _localVariables.Add(variable);
@@ -48,12 +65,12 @@ namespace compiler_c0.symbol_manager.symbol
             switch (valueType)
             {
                 case ValueType.Void:
-                    returnSlot = 0;
+                    ReturnSlot = 0;
                     break;
                 case ValueType.Int:
                 case ValueType.Float:
                 case ValueType.String:
-                    returnSlot = 1;
+                    ReturnSlot = 1;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null);
@@ -62,7 +79,7 @@ namespace compiler_c0.symbol_manager.symbol
 
         public void AddInstruction(Instruction instruction)
         {
-            Instructions.Add(instruction);
+            _instructions.Add(instruction);
         }
 
         public override string ToString()
@@ -70,12 +87,12 @@ namespace compiler_c0.symbol_manager.symbol
             var sb = new StringBuilder();
             sb.AppendLine("\tFunction:");
             sb.AppendLine($"\t\tName: {Name}");
-            sb.AppendLine($"\t\tReturnSlot: {returnSlot}");
+            sb.AppendLine($"\t\tReturnSlot: {ReturnSlot}");
             sb.AppendLine($"\t\tParamSlot: {param_slots}");
             sb.AppendLine($"\t\tLocSlot: {loc_slots}");
 
             sb.AppendLine("\t\tInstructions:");
-            foreach (var instruction in Instructions)
+            foreach (var instruction in _instructions)
             {
                 sb.AppendLine($"\t\t\t{instruction}");
             }
@@ -86,12 +103,12 @@ namespace compiler_c0.symbol_manager.symbol
         public IEnumerable<byte> ToBytes()
         {
             var nameByte = BitConverter.GetBytes(Name).Reverse();
-            var returnByte = BitConverter.GetBytes(returnSlot).Reverse();
+            var returnByte = BitConverter.GetBytes(ReturnSlot).Reverse();
             var paramByte = BitConverter.GetBytes(param_slots).Reverse();
             var locByte = BitConverter.GetBytes(loc_slots).Reverse();
 
-            var bodyByte = BitConverter.GetBytes(Instructions.Count).Reverse();
-            foreach (var instruction in Instructions)
+            var bodyByte = BitConverter.GetBytes(_instructions.Count).Reverse();
+            foreach (var instruction in _instructions)
             {
                 bodyByte = bodyByte.Concat(instruction.ToBytes());
             }
