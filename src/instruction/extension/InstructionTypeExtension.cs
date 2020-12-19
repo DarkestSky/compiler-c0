@@ -12,7 +12,7 @@ namespace compiler_c0.instruction.extension
                 return 0;
             }
 
-            if (U32ParamInstructionTypes.Contains(type))
+            if (U32ParamInstructionTypes.Contains(type) || I32ParamInstructionTypes.Contains(type))
             {
                 return 1;
             }
@@ -23,6 +23,11 @@ namespace compiler_c0.instruction.extension
             }
 
             throw new Exception("unexpected instruction type");
+        }
+
+        public static bool IsSigned(this InstructionType type)
+        {
+            return I32ParamInstructionTypes.Contains(type);
         }
 
         private static readonly HashSet<InstructionType> NoParamInstructionTypes = new()
@@ -84,11 +89,15 @@ namespace compiler_c0.instruction.extension
             InstructionType.Arga,
             InstructionType.Globa,
             InstructionType.StackAlloc,
+            InstructionType.Call,
+            InstructionType.Callname,
+        };
+
+        private static readonly HashSet<InstructionType> I32ParamInstructionTypes = new()
+        {
             InstructionType.Br,
             InstructionType.BrFalse,
             InstructionType.BrTrue,
-            InstructionType.Call,
-            InstructionType.Callname,
         };
 
         private static readonly HashSet<InstructionType> U64ParamInstructionTypes = new()

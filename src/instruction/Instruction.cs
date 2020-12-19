@@ -34,6 +34,10 @@ namespace compiler_c0.instruction
             _value = BitConverter.GetBytes(param);
         }
 
+        public Instruction(InstructionType type, int param) : this(type, (uint) param)
+        {
+        }
+
         public Instruction(InstructionType type, ulong param)
         {
             _type = type;
@@ -49,10 +53,17 @@ namespace compiler_c0.instruction
         {
             var s = new StringBuilder();
             s.Append($"Instruction: {_type}");
+            if (_type.ToString().Length < 3)
+                s.Append('\t');
             switch (_valueSize)
             {
                 case 1:
-                    s.Append($"\tParamType: U32Int\tParam: {BitConverter.ToUInt32(_value)}");
+                    s.Append("\tParamType: U32Int\tParam: ");
+                    if (_type.IsSigned())
+                        s.Append(BitConverter.ToInt32(_value));
+                    else
+                        s.Append(BitConverter.ToUInt32(_value));
+
                     break;
                 case 2:
                     s.Append($"\tParamType: U64Int\tParam: {BitConverter.ToUInt64(_value)}");

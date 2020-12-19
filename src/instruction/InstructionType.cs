@@ -68,13 +68,15 @@ namespace compiler_c0.instruction
         Arga = 0x0B,
         Globa = 0x0C,
         StackAlloc = 0x1A,
+        Call = 0x48,
+        Callname = 0x4A,
+        
+        // I32Param
         Br = 0x41,
         BrFalse = 0x42,
         BrTrue = 0x43,
-        Call = 0x48,
-        Callname = 0x4A,
 
-        //U64Param
+        // U64Param
         Push = 0x01
     }
 }
