@@ -70,10 +70,14 @@ namespace compiler_c0.tokenizer
             }
 
             var peek = _charParser.PeekChar();
-            Token token = null;
+            Token token;
             if (char.IsDigit(peek))
             {
                 token = _parseNumber();
+            }
+            else if (peek == '\'')
+            {
+                token = _parseConstantChar();
             }
             else if (peek == '"')
             {
@@ -221,6 +225,57 @@ namespace compiler_c0.tokenizer
             }
 
             return new Token(sb.ToString().ToOperator(), pos);
+        }
+
+        private Token _parseConstantChar()
+        {
+            var pos = _charParser.CurrentPos();
+
+            _charParser.NextChar();
+            var sb = new StringBuilder();
+            while (_charParser.PeekChar() != '\'')
+            {
+                sb.Append(_charParser.NextChar());
+            }
+
+            _charParser.NextChar();
+
+            char value;
+            if (sb.Length == 1)
+            {
+                value = sb[0];
+            } else if (sb.Length == 2)
+            {
+                switch (sb.ToString())
+                {
+                    case "\\\\":
+                        value = '\\';
+                        break;
+                    case "\\\'":
+                        value = '\'';
+                        break;
+                    case "\\\"":
+                        value = '\"';
+                        break;
+                    case "\\n":
+                        value = '\n';
+                        break;
+                    case "\\t":
+                        value = '\t';
+                        break;
+                    case "\\r":
+                        value = '\r';
+                        break;
+                    default:
+                        throw new Exception("invalid char");
+                }
+            }
+            else
+            {
+                throw new Exception("invalid char");
+            }
+            
+            return new Token(TokenType.LiteralNumber, pos) {Value = (ulong) value};
         }
     }
 }
