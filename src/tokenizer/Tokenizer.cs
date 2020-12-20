@@ -120,6 +120,9 @@ namespace compiler_c0.tokenizer
             _charParser.NextChar();
             while (isBackslash || _charParser.PeekChar() != '"')
             {
+                if (!_charParser.HasNext())
+                    throw new Exception("invalid string");
+
                 var next = _charParser.NextChar();
                 if (isBackslash)
                 {
@@ -170,7 +173,7 @@ namespace compiler_c0.tokenizer
         {
             var pos = _charParser.CurrentPos();
             var sb = new StringBuilder();
-            while (char.IsLetterOrDigit(_charParser.PeekChar()))
+            while (char.IsLetterOrDigit(_charParser.PeekChar()) || _charParser.PeekChar() == '_')
             {
                 sb.Append(_charParser.NextChar());
             }
