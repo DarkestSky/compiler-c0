@@ -165,17 +165,10 @@ namespace compiler_c0.analyser.sub_function.expression
             }
         }
 
-        private static void AnalyseCallParam(List<ValueType> valueTypes)
+        private static void AnalyseCallParam(ICollection<ValueType> valueTypes)
         {
-            if (Tokenizer.PeekToken().IsLiteral())
-            {
-                valueTypes.Add(AnalyseLiteralExpression().ValueType);
-            }
-            else if (Tokenizer.PeekToken().Is(TokenType.Identifier))
-            {
-                // todo: maybe this is a function
-                valueTypes.Add(AnalyseIdentOrCallExpression().ValueType);
-            }
+            var type = AnalyseExpression();
+            valueTypes.Add(type.ValueType);
         }
 
         private static ExpressionValue AnalyseLiteralExpression()
