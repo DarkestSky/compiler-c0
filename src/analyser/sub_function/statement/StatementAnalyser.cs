@@ -74,7 +74,7 @@ namespace compiler_c0.analyser.sub_function.statement
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
             Tokenizer.ExpectToken(TokenType.Colon);
             var type = Tokenizer.ExpectToken(TokenType.Identifier);
-            var variable = SymbolManager.NewVariable((string) ident.Value, type.ToValueType());
+            var variable = SymbolManager.NewVariable((string) ident.Value, type.ToValueType(), false);
             if (Tokenizer.PeekToken().Is(TokenType.Assign))
             {
                 Tokenizer.ExpectToken(TokenType.Assign);
@@ -102,7 +102,7 @@ namespace compiler_c0.analyser.sub_function.statement
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
             Tokenizer.ExpectToken(TokenType.Colon);
             var type = Tokenizer.ExpectToken(TokenType.Identifier);
-            var variable = SymbolManager.NewVariable((string) ident.Value, type.ToValueType());
+            var variable = SymbolManager.NewVariable((string) ident.Value, type.ToValueType(), true);
             Tokenizer.ExpectToken(TokenType.Assign);
             SymbolManager.AddLoadAddressInstruction(variable);
             var e = ExpressionAnalyser.AnalyseExpression();

@@ -118,14 +118,27 @@ namespace compiler_c0.analyser.sub_function.expression
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
             var symbol = SymbolManager.FindSymbol((string) ident.Value);
             SymbolManager.AddLoadAddressInstruction(symbol);
-            
-            if (!Tokenizer.PeekToken().Is(TokenType.Assign))
-                SymbolManager.AddInstruction(new Instruction(InstructionType.Load64));
 
             if (symbol is Variable variable)
+            {
+                if (!Tokenizer.PeekToken().Is(TokenType.Assign))
+                {
+                    SymbolManager.AddInstruction(new Instruction(InstructionType.Load64));
+                    variable.TryAssign();
+                }
                 return new ExpressionValue(variable.ValueType);
+            }
+
             if (symbol is Param param)
+            {
+                if (!Tokenizer.PeekToken().Is(TokenType.Assign))
+                {
+                    SymbolManager.AddInstruction(new Instruction(InstructionType.Load64));
+                    param.TryAssign();
+                }
                 return new ExpressionValue(param.ValueType);
+            }
+
             throw new Exception("unreachable code");
         }
 

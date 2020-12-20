@@ -10,7 +10,7 @@ namespace compiler_c0.symbol_manager.symbol
     {
         private readonly byte _isConst;
 
-        private bool _initialed = false;
+        private bool _initialed;
         public ValueType ValueType { get; set; }
         private byte[] _value;
 
@@ -38,15 +38,12 @@ namespace compiler_c0.symbol_manager.symbol
             _value = Encoding.ASCII.GetBytes(v);
         }
 
-        public void SetValue(long v)
+        public void TryAssign()
         {
-            
+            if (IsConst)
+                throw new Exception("assign is not allowed with const variable");
         }
-
-        public void SetValue(double v)
-        {
-            
-        }
+        
         
         public IEnumerable<byte> ToBytes()
         {

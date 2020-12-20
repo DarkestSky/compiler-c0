@@ -60,11 +60,11 @@ namespace compiler_c0.symbol_manager
             }
         }
 
-        public Variable NewVariable(string name, ValueType type)
+        public Variable NewVariable(string name, ValueType type, bool isConst)
         {
             CheckDuplicate(name);
             // alloc offset according to TYPE
-            var variable = new Variable(type, true);
+            var variable = new Variable(type, isConst);
 
             CurSymbolTable.AddSymbol(name, variable);
 
@@ -82,7 +82,7 @@ namespace compiler_c0.symbol_manager
             
             // add FuncName into global variable table
             // FuncName will be linked when creating function
-            var variable = NewVariable($"fun({name})", ValueType.String);
+            var variable = NewVariable($"fun({name})", ValueType.String, true);
             variable.SetValue(name);
 
             var function = new Function();
