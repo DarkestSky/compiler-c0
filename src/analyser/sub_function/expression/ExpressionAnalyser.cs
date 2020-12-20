@@ -5,6 +5,7 @@ using System.Text;
 using compiler_c0.instruction;
 using compiler_c0.symbol_manager;
 using compiler_c0.symbol_manager.symbol;
+using compiler_c0.symbol_manager.value_type;
 using compiler_c0.tokenizer;
 using compiler_c0.tokenizer.token;
 using compiler_c0.tokenizer.token.extensions;
@@ -73,6 +74,12 @@ namespace compiler_c0.analyser.sub_function.expression
                 lValue = ExpressionCombiner.Combine(lValue, op, rValue);
             }
 
+            // analyse As
+            if (Tokenizer.PeekToken().Is(TokenType.As))
+            {
+                return AnalyseAsExpression(lValue);
+            }
+            
             return lValue;
         }
 
@@ -193,6 +200,23 @@ namespace compiler_c0.analyser.sub_function.expression
             }
 
             throw new Exception("unreachable code");
+        }
+
+        private static ExpressionValue AnalyseAsExpression(ExpressionValue lValue)
+        {
+            Tokenizer.ExpectToken(TokenType.As);
+            var type = Tokenizer.ExpectToken(TokenType.Identifier).ToValueType();
+            if (lValue.ValueType == ValueType.Int  && type == ValueType.Float)
+            {
+                SymbolManager.AddInstruction(new Instruction(InstructionType.ItoF));
+            }
+            else if (lValue.ValueType == ValueType.Float && type == ValueType.Int)
+            {
+                SymbolManager.AddInstruction(new Instruction(InstructionType.FtoI));
+            }
+
+
+            return new ExpressionValue(type);
         }
     }
 }
