@@ -157,10 +157,9 @@ namespace compiler_c0.tokenizer
                 else
                 {
                     sb.Append(next);
+                    if (next == '\\')
+                        isBackslash = true;
                 }
-
-                if (next == '\\')
-                    isBackslash = true;
             }
 
             _charParser.NextChar();
