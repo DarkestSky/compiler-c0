@@ -10,6 +10,8 @@ namespace compiler_c0.symbol_manager
     {
         protected readonly List<KeyValuePair<string, Variable>> Variables = new();
 
+        public int VariableCount => Variables.Count;
+
         // ReSharper disable once InconsistentNaming
         private readonly List<KeyValuePair<string, Param>> Params = new();
         

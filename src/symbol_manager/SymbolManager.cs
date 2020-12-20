@@ -18,6 +18,8 @@ namespace compiler_c0.symbol_manager
 
         private SymbolTable CurSymbolTable => _symbolTables.Last();
 
+        private SymbolTable FunctionSymbolTable => _symbolTables[1];
+
         public GlobalSymbolTable GlobalSymbolTable => (GlobalSymbolTable) _symbolTables.First();
 
         private SymbolManager()
@@ -120,16 +122,28 @@ namespace compiler_c0.symbol_manager
             }
             else if (symbol is Variable variable)
             {
-                // todo
-                // priority: loc > param > global;
-                int i;
-                if ((i = CurSymbolTable.FindVariable(variable)) != -1)
+                int localOffset = -1;
+                var curOffset = 0;
+                for (var index = 1;index < _symbolTables.Count;index ++)
                 {
-                    CurFunction.AddInstruction(new Instruction(InstructionType.Loca, (uint) i));
+                    var f = _symbolTables[index].FindVariable(variable);
+                    if (f != -1)
+                    {
+                        localOffset = f + curOffset;
+                        break;
+                    }
+
+                    curOffset += _symbolTables[index].VariableCount;
                 }
-                else if((i=GlobalSymbolTable.FindVariable(variable)) != -1)
+                
+                int globalOffset;
+                if (localOffset != -1)
                 {
-                    CurFunction.AddInstruction(new Instruction(InstructionType.Globa, (uint) i));
+                    CurFunction.AddInstruction(new Instruction(InstructionType.Loca, (uint) localOffset));
+                }
+                else if((globalOffset=GlobalSymbolTable.FindVariable(variable)) != -1)
+                {
+                    CurFunction.AddInstruction(new Instruction(InstructionType.Globa, (uint) globalOffset));
                 }
                 else
                 {
@@ -138,14 +152,14 @@ namespace compiler_c0.symbol_manager
             }
             else if (symbol is Param param)
             {
-                int i;
-                if ((i = CurSymbolTable.FindParam(param)) != -1)
+                int paramOffset;
+                if ((paramOffset = FunctionSymbolTable.FindParam(param)) != -1)
                 {
-                    CurFunction.AddInstruction(new Instruction(InstructionType.Arga, (uint) i));
+                    CurFunction.AddInstruction(new Instruction(InstructionType.Arga, (uint) paramOffset));
                 }
                 else
                 {
-                    throw new Exception("variable not found");
+                    throw new Exception("param not found");
                 }
             }
         }
