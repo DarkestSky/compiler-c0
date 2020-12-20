@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using compiler_c0.char_parser;
@@ -99,17 +100,17 @@ namespace compiler_c0.tokenizer
             }
         }
 
+        private static readonly HashSet<char> DoubleCharSet = new() {'.', '-', 'e', 'E'};
+        
         private Token _parseNumber()
         {
             var pos = _charParser.CurrentPos();
             var sb = new StringBuilder();
             var hasPoint = false;
-            while (char.IsDigit(_charParser.PeekChar()) || _charParser.PeekChar() == '.')
+            while (char.IsDigit(_charParser.PeekChar()) || DoubleCharSet.Contains(_charParser.PeekChar()))
             {
                 if (_charParser.PeekChar() == '.')
                 {
-                    if (hasPoint)
-                        throw new Exception("duplicate point found");
                     hasPoint = true;
                 }
                 sb.Append(_charParser.NextChar());

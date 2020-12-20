@@ -55,9 +55,9 @@ namespace compiler_c0.analyser.sub_function.expression
             }
 
             // analyse As
-            if (Tokenizer.PeekToken().Is(TokenType.As))
+            while (Tokenizer.PeekToken().Is(TokenType.As))
             {
-                return AnalyseAsExpression(value);
+                value =  AnalyseAsExpression(value);
             }
             
             return value;
