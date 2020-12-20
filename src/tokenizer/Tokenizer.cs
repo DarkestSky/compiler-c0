@@ -103,13 +103,28 @@ namespace compiler_c0.tokenizer
         {
             var pos = _charParser.CurrentPos();
             var sb = new StringBuilder();
-            while (char.IsDigit(_charParser.PeekChar()))
+            var hasPoint = false;
+            while (char.IsDigit(_charParser.PeekChar()) || _charParser.PeekChar() == '.')
             {
+                if (_charParser.PeekChar() == '.')
+                {
+                    if (hasPoint)
+                        throw new Exception("duplicate point found");
+                    hasPoint = true;
+                }
                 sb.Append(_charParser.NextChar());
             }
 
-            var number = ulong.Parse(sb.ToString());
-            return new Token(TokenType.LiteralNumber, pos) {Value = number};
+            if (hasPoint)
+            {
+                var number = double.Parse(sb.ToString());
+                return new Token(TokenType.LiteralDouble, pos) {Value = number};
+            }
+            else
+            {
+                var number = ulong.Parse(sb.ToString());
+                return new Token(TokenType.LiteralNumber, pos) {Value = number};
+            }
         }
 
         private Token _parseConstantString()

@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using compiler_c0.analyser.sub_function.expression;
 using compiler_c0.instruction;
 using compiler_c0.symbol_manager;
@@ -101,9 +102,17 @@ namespace compiler_c0.analyser.sub_function.statement
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
             Tokenizer.ExpectToken(TokenType.Colon);
             var type = Tokenizer.ExpectToken(TokenType.Identifier);
+            var variable = SymbolManager.NewVariable((string) ident.Value, type.ToValueType());
             Tokenizer.ExpectToken(TokenType.Assign);
-            ExpressionAnalyser.AnalyseExpression();
+            SymbolManager.AddLoadAddressInstruction(variable);
+            var e = ExpressionAnalyser.AnalyseExpression();
+
+            if (variable.ValueType != e.ValueType)
+                throw new Exception("value type not match");
             Tokenizer.ExpectToken(TokenType.Semicolon);
+            
+            SymbolManager.AddInstruction(new Instruction(InstructionType.Store64));
+            variable.Initial();
         }
 
         public static void AnalyseIfStatement()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using compiler_c0.instruction;
 using compiler_c0.symbol_manager;
 using compiler_c0.symbol_manager.symbol;
@@ -181,8 +182,9 @@ namespace compiler_c0.analyser.sub_function.expression
                         new Instruction(InstructionType.Push, (ulong) token.Value));
                     return new ExpressionValue(ValueType.Int);
                 case TokenType.LiteralDouble:
+                    var value = BitConverter.ToUInt64(BitConverter.GetBytes((double) token.Value));
                     SymbolManager.CurFunction.AddInstruction(
-                        new Instruction(InstructionType.Push, (ulong) token.Value));
+                        new Instruction(InstructionType.Push, value));
                     return new ExpressionValue(ValueType.Float);
                 case TokenType.LiteralString:
                     var i = SymbolManager.GlobalSymbolTable.NewGlobalString((string) token.Value);
