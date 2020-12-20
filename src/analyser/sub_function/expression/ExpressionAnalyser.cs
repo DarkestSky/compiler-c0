@@ -54,6 +54,12 @@ namespace compiler_c0.analyser.sub_function.expression
                 throw new Exception("unreachable code");
             }
 
+            // analyse As
+            if (Tokenizer.PeekToken().Is(TokenType.As))
+            {
+                return AnalyseAsExpression(value);
+            }
+            
             return value;
         }
 
@@ -73,13 +79,7 @@ namespace compiler_c0.analyser.sub_function.expression
 
                 lValue = ExpressionCombiner.Combine(lValue, op, rValue);
             }
-
-            // analyse As
-            if (Tokenizer.PeekToken().Is(TokenType.As))
-            {
-                return AnalyseAsExpression(lValue);
-            }
-            
+ 
             return lValue;
         }
 
