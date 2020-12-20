@@ -88,7 +88,6 @@ namespace compiler_c0.symbol_manager
 
         public override Symbol FindSymbol(string name)
         {
-            // todo find lib function
             return (Symbol) FindVariable(name, out _) ?? FindFunction(name, out _);
         }
 

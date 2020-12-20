@@ -69,6 +69,12 @@ namespace compiler_c0.symbol_manager
             var variable = new Variable(type, isConst);
 
             CurSymbolTable.AddSymbol(name, variable);
+            if (_symbolTables.Count > 1)
+            {
+                // todo update function symbol table's variable slot;
+                // UpdateFunctionVariableSlot();
+                CurFunction.LocSlots += 1;
+            }
 
             return variable;
         }

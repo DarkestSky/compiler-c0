@@ -19,7 +19,7 @@ namespace compiler_c0.symbol_manager.symbol
 
         public uint ParamSlots { get; protected set; }
 
-        public uint LocSlots { get; protected set; }
+        public uint LocSlots { get; set; }
 
         public readonly List<ValueType> Params = new();
 

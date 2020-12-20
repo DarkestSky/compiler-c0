@@ -173,6 +173,9 @@ namespace compiler_c0.analyser.sub_function.statement
         /// <param name="createTable">Weather To Create A New Symbol Table</param>
         public static void AnalyseBlockStatement(bool createTable)
         {
+            if (createTable)
+                SymbolManager.CreateSymbolTable();
+
             Tokenizer.ExpectToken(TokenType.LBrace);
             while (!Tokenizer.PeekToken().Is(TokenType.RBrace))
             {
@@ -180,6 +183,9 @@ namespace compiler_c0.analyser.sub_function.statement
             }
 
             Tokenizer.ExpectToken(TokenType.RBrace);
+
+            if (createTable)
+                SymbolManager.DeleteSymbolTable();
         }
 
         public static void AnalyseReturnStatement()
