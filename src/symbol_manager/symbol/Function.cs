@@ -88,7 +88,6 @@ namespace compiler_c0.symbol_manager.symbol
                 case ValueType.Float:
                     ReturnSlot = 1;
                     SymbolManager.SetReturnParam(valueType);
-                    ParamSlots += 1;
                     Params.Insert(0, ReturnType);
                     break;
                 default:
