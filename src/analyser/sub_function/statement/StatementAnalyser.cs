@@ -117,7 +117,8 @@ namespace compiler_c0.analyser.sub_function.statement
             SymbolManager.AddInstruction(new Instruction(InstructionType.BrTrue, 1));
             var iThrough = SymbolManager.AddInstruction(new Instruction(InstructionType.Br, 0));
             AnalyseBlockStatement(true);
-            // todo: iThrough should jump to here
+            
+            // iThrough should jump to here
             iThrough.SetParam(SymbolManager.GetInstructionOffset(iThrough) + 1);
             
             if (Tokenizer.PeekToken().Is(TokenType.Else))
@@ -133,9 +134,11 @@ namespace compiler_c0.analyser.sub_function.statement
                     AnalyseIfStatement();
                 }
                 
-                // todo: iThrough should jump to here
+                // iThrough should jump to here
                 iInnerThrough.SetParam(SymbolManager.GetInstructionOffset(iInnerThrough) + 1);
             }
+            
+            SymbolManager.AddInstruction(new Instruction(InstructionType.Br, 0));
         }
 
         public static void AnalyseWhileStatement()
