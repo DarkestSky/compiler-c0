@@ -124,6 +124,9 @@ namespace compiler_c0.analyser.sub_function.expression
                 if (!Tokenizer.PeekToken().Is(TokenType.Assign))
                 {
                     SymbolManager.AddInstruction(new Instruction(InstructionType.Load64));
+                }
+                else
+                {
                     variable.TryAssign();
                 }
                 return new ExpressionValue(variable.ValueType);
@@ -134,6 +137,9 @@ namespace compiler_c0.analyser.sub_function.expression
                 if (!Tokenizer.PeekToken().Is(TokenType.Assign))
                 {
                     SymbolManager.AddInstruction(new Instruction(InstructionType.Load64));
+                }
+                else
+                {
                     param.TryAssign();
                 }
                 return new ExpressionValue(param.ValueType);
