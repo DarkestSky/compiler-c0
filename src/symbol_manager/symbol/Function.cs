@@ -114,29 +114,40 @@ namespace compiler_c0.symbol_manager.symbol
             return _instructions.Count - _instructions.FindIndex(i => i == instruction) - 1;
         }
 
-        public void EnterWhile()
+        public void EnterWhile(Instruction continuePoint)
         {
             _whileDepth += 1;
+            _continuePoints.Add(continuePoint);
         }
 
         public void LeaveWhile()
         {
             _whileDepth -= 1;
-            _continuePoint.RemoveAt(_continuePoint.Count - 1);
+            _continuePoints.RemoveAt(_continuePoints.Count - 1);
+
+            foreach (var breakPoint in _breakPoints)
+            {
+                breakPoint.SetParam(SymbolManager.GetInstructionOffset(breakPoint));
+            }
+            _breakPoints.Clear();
         }
 
-        private List<Instruction> _continuePoint = new();
-        public void SetContinuePoint(Instruction instruction)
-        {
-            _continuePoint.Add(instruction);
-        }
-        
+        private readonly List<Instruction> _continuePoints = new();
+        private readonly List<Instruction> _breakPoints = new();
+
         public void SetContinue()
         {
             if (_whileDepth == 0)
                 throw new Exception("continue is not allowed here");
             var i = SymbolManager.AddInstruction(new Instruction(InstructionType.Br, 0));
-            i.SetParam(SymbolManager.GetInstructionOffset(i, _continuePoint.Last()));
+            i.SetParam(SymbolManager.GetInstructionOffset(i, _continuePoints.Last()));
+        }
+        
+        public void SetBreak()
+        {
+            if (_whileDepth == 0)
+                throw new Exception("continue is not allowed here");
+            _breakPoints.Add(SymbolManager.AddInstruction(new Instruction(InstructionType.Br, 0)));
         }
 
         public override string ToString()

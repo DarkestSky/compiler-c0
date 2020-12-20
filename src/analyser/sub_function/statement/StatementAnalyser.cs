@@ -159,10 +159,10 @@ namespace compiler_c0.analyser.sub_function.statement
         public static void AnalyseWhileStatement()
         {
             Tokenizer.ExpectToken(TokenType.While);
-            SymbolManager.EnterWhile();
             
             var brStart = SymbolManager.AddInstruction(new Instruction(InstructionType.Br, 0));
-            SymbolManager.SetContinuePoint(brStart);
+            SymbolManager.EnterWhile(brStart);
+            
             var condition = ExpressionAnalyser.AnalyseExpression();
             if (condition.ValueType != ValueType.Int)
                 throw new Exception("invalid condition expression");
@@ -230,6 +230,8 @@ namespace compiler_c0.analyser.sub_function.statement
         {
             Tokenizer.ExpectToken(TokenType.Break);
             Tokenizer.ExpectToken(TokenType.Semicolon);
+            
+            SymbolManager.SetBreak();
         }
 
         private static void AnalyseContinueStatement()

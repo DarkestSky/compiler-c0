@@ -234,11 +234,12 @@ namespace compiler_c0.symbol_manager
             writer.Write(GlobalSymbolTable.ToBytes().ToArray());
         }
 
-        public void EnterWhile() => CurFunction.EnterWhile();
+        public void EnterWhile(Instruction continuePoint) => CurFunction.EnterWhile(continuePoint);
 
         public void LeaveWhile() => CurFunction.LeaveWhile();
-
-        public void SetContinuePoint(Instruction instruction) => CurFunction.SetContinuePoint(instruction);
+        
         public void SetContinue() => CurFunction.SetContinue();
+
+        public void SetBreak() => CurFunction.SetBreak();
     }
 }
