@@ -116,10 +116,51 @@ namespace compiler_c0.tokenizer
         {
             var pos = _charParser.CurrentPos();
             var sb = new StringBuilder();
+            var isBackslash = false;
             _charParser.NextChar();
-            while (_charParser.PeekChar() != '"')
+            while (isBackslash || _charParser.PeekChar() != '"')
             {
-                sb.Append(_charParser.NextChar());
+                var next = _charParser.NextChar();
+                if (isBackslash)
+                {
+                    switch (next)
+                    {
+                        case '\\':
+                            break;
+                        case '\"':
+                            sb.Remove(sb.Length - 1, 1);
+                            sb.Append('\"');
+                            break;
+                        case '\'':
+                            sb.Remove(sb.Length - 1, 1);
+                            sb.Append('\'');
+                            break;
+                        case 'n':
+                            sb.Remove(sb.Length - 1, 1);
+                            sb.Append('\n');
+                            break;
+                        case 't':
+                            sb.Remove(sb.Length - 1, 1);
+                            sb.Append('\t');
+                            break;
+                        case 'r':
+                            sb.Remove(sb.Length - 1, 1);
+                            sb.Append('\r');
+                            break;
+                        default:
+                            sb.Append(next);
+                            break;
+                    }
+
+                    isBackslash = false;
+                }
+                else
+                {
+                    sb.Append(next);
+                }
+
+                if (next == '\\')
+                    isBackslash = true;
             }
 
             _charParser.NextChar();
