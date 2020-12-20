@@ -211,6 +211,15 @@ namespace compiler_c0.tokenizer
             var sb = new StringBuilder();
             sb.Append(_charParser.PeekChar());
             var firstChar = _charParser.NextChar();
+
+            // check comment
+            if (firstChar == '/' && _charParser.PeekChar() == '/')
+            {
+                while (_charParser.NextChar() != '\n') ;
+
+                return _fetchNextToken();
+            }
+
             if (firstChar.IsFirstOfOperator())
             {
                 sb.Append(_charParser.PeekChar());
