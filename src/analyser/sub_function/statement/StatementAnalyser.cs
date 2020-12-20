@@ -40,6 +40,12 @@ namespace compiler_c0.analyser.sub_function.statement
                 case TokenType.Semicolon:
                     AnalyseEmptyStatement();
                     break;
+                case TokenType.Break:
+                    AnalyseBreakStatement();
+                    break;
+                case TokenType.Continue:
+                    AnalyseContinueStatement();
+                    break;
                 default:
                     AnalyseExpressionStatement();
                     break;
@@ -153,8 +159,10 @@ namespace compiler_c0.analyser.sub_function.statement
         public static void AnalyseWhileStatement()
         {
             Tokenizer.ExpectToken(TokenType.While);
+            SymbolManager.EnterWhile();
             
             var brStart = SymbolManager.AddInstruction(new Instruction(InstructionType.Br, 0));
+            SymbolManager.SetContinuePoint(brStart);
             var condition = ExpressionAnalyser.AnalyseExpression();
             if (condition.ValueType != ValueType.Int)
                 throw new Exception("invalid condition expression");
@@ -165,6 +173,8 @@ namespace compiler_c0.analyser.sub_function.statement
             var brBack = SymbolManager.AddInstruction(new Instruction(InstructionType.Br, 0));
             brBack.SetParam(SymbolManager.GetInstructionOffset(brBack, brStart));
             brForward.SetParam(SymbolManager.GetInstructionOffset(brForward, brBack) + 1);
+
+            SymbolManager.LeaveWhile();
         }
 
         /// <summary>
@@ -214,6 +224,20 @@ namespace compiler_c0.analyser.sub_function.statement
         public static void AnalyseEmptyStatement()
         {
             Tokenizer.ExpectToken(TokenType.Semicolon);
+        }
+
+        private static void AnalyseBreakStatement()
+        {
+            Tokenizer.ExpectToken(TokenType.Break);
+            Tokenizer.ExpectToken(TokenType.Semicolon);
+        }
+
+        private static void AnalyseContinueStatement()
+        {
+            Tokenizer.ExpectToken(TokenType.Continue);
+            Tokenizer.ExpectToken(TokenType.Semicolon);
+            
+            SymbolManager.SetContinue();
         }
     }
 }

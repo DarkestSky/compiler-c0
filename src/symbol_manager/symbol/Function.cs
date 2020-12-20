@@ -25,6 +25,8 @@ namespace compiler_c0.symbol_manager.symbol
 
         private readonly List<Instruction> _instructions = new();
 
+        private int _whileDepth;
+
 
         public bool CheckParamList(List<ValueType> paramList)
         {
@@ -110,6 +112,31 @@ namespace compiler_c0.symbol_manager.symbol
         public int GetInstructionOffset(Instruction instruction)
         {
             return _instructions.Count - _instructions.FindIndex(i => i == instruction) - 1;
+        }
+
+        public void EnterWhile()
+        {
+            _whileDepth += 1;
+        }
+
+        public void LeaveWhile()
+        {
+            _whileDepth -= 1;
+            _continuePoint.RemoveAt(_continuePoint.Count - 1);
+        }
+
+        private List<Instruction> _continuePoint = new();
+        public void SetContinuePoint(Instruction instruction)
+        {
+            _continuePoint.Add(instruction);
+        }
+        
+        public void SetContinue()
+        {
+            if (_whileDepth == 0)
+                throw new Exception("continue is not allowed here");
+            var i = SymbolManager.AddInstruction(new Instruction(InstructionType.Br, 0));
+            i.SetParam(SymbolManager.GetInstructionOffset(i, _continuePoint.Last()));
         }
 
         public override string ToString()

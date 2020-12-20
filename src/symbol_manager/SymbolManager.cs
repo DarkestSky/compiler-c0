@@ -233,5 +233,12 @@ namespace compiler_c0.symbol_manager
             using var writer = new BinaryWriter(File.Open(GlobalConfig.OutputFilePath, FileMode.Create));
             writer.Write(GlobalSymbolTable.ToBytes().ToArray());
         }
+
+        public void EnterWhile() => CurFunction.EnterWhile();
+
+        public void LeaveWhile() => CurFunction.LeaveWhile();
+
+        public void SetContinuePoint(Instruction instruction) => CurFunction.SetContinuePoint(instruction);
+        public void SetContinue() => CurFunction.SetContinue();
     }
 }
