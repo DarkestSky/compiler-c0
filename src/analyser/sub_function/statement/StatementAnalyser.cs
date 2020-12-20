@@ -109,10 +109,20 @@ namespace compiler_c0.analyser.sub_function.statement
         public static void AnalyseIfStatement()
         {
             Tokenizer.ExpectToken(TokenType.If);
-            ExpressionAnalyser.AnalyseExpression();
+            var condition = ExpressionAnalyser.AnalyseExpression();
+
+            if (condition.ValueType != ValueType.Int)
+                throw new Exception("invalid condition expression");
+            
+            SymbolManager.AddInstruction(new Instruction(InstructionType.BrTrue, 1));
+            var iThrough = SymbolManager.AddInstruction(new Instruction(InstructionType.Br, 0));
             AnalyseBlockStatement(true);
+            // todo: iThrough should jump to here
+            iThrough.SetParam(SymbolManager.GetInstructionOffset(iThrough) + 1);
+            
             if (Tokenizer.PeekToken().Is(TokenType.Else))
             {
+                var iInnerThrough = SymbolManager.AddInstruction(new Instruction(InstructionType.Br, 0));
                 Tokenizer.ExpectToken(TokenType.Else);
                 if (Tokenizer.PeekToken().Is(TokenType.LBrace))
                 {
@@ -122,6 +132,9 @@ namespace compiler_c0.analyser.sub_function.statement
                 {
                     AnalyseIfStatement();
                 }
+                
+                // todo: iThrough should jump to here
+                iInnerThrough.SetParam(SymbolManager.GetInstructionOffset(iInnerThrough) + 1);
             }
         }
 

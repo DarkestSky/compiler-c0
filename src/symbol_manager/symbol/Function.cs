@@ -107,7 +107,12 @@ namespace compiler_c0.symbol_manager.symbol
                    - _instructions.FindIndex(i => i == instruction1)
                    - 1;
         }
-        
+
+        public int GetInstructionOffset(Instruction instruction)
+        {
+            return _instructions.Count - _instructions.FindIndex(i => i == instruction) - 1;
+        }
+
         public override string ToString()
         {
             var sb = new StringBuilder();

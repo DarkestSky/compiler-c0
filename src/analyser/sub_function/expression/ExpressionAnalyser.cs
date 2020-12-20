@@ -43,6 +43,10 @@ namespace compiler_c0.analyser.sub_function.expression
             {
                 value = AnalyseLiteralExpression();
             }
+            else if (Tokenizer.PeekToken().Is(TokenType.Semicolon))
+            {
+                value = new ExpressionValue(ValueType.Void);
+            }
             else
             {
                 throw new Exception("unreachable code");
