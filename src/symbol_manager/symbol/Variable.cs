@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
+using ValueType = compiler_c0.symbol_manager.symbol.value_type.ValueType;
 
 namespace compiler_c0.symbol_manager.symbol
 {
@@ -11,7 +11,7 @@ namespace compiler_c0.symbol_manager.symbol
         private readonly byte _isConst;
 
         private bool _initialed;
-        public ValueType ValueType { get; set; }
+        public ValueType ValueType { get; }
         private byte[] _value;
 
         public Variable(ValueType type, bool isConst)
@@ -24,7 +24,7 @@ namespace compiler_c0.symbol_manager.symbol
             }
         }
 
-        public bool IsConst => _isConst == 1;
+        private bool IsConst => _isConst == 1;
 
         public bool Initialed => _initialed;
 
@@ -51,15 +51,8 @@ namespace compiler_c0.symbol_manager.symbol
             result = result.Append(_isConst);
 
             result = result.Concat(BitConverter.GetBytes(_value.Length).Reverse());
-            if (ValueType == ValueType.String)
-            {
-                result = result.Concat(_value);
-            }
-            else
-            {
-                result = result.Concat(_value.Reverse());
-            }
-            
+            result = result.Concat(ValueType == ValueType.String ? _value : _value.Reverse());
+
             return result;
         }
 

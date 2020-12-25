@@ -1,11 +1,11 @@
 using System;
-using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
+using ValueType = compiler_c0.symbol_manager.symbol.value_type.ValueType;
 
 namespace compiler_c0.symbol_manager.symbol
 {
     public class Param : Symbol
     {
-        public bool IsConst { get; private set; }
+        private bool IsConst { get; set; }
         
         public ValueType ValueType { get; private set; }
 

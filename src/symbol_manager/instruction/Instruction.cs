@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using compiler_c0.instruction.extension;
+using compiler_c0.symbol_manager.instruction.extension;
 
-namespace compiler_c0.instruction
+namespace compiler_c0.symbol_manager.instruction
 {
     public class Instruction
     {
@@ -29,7 +29,7 @@ namespace compiler_c0.instruction
             SetParam(param);
         }
 
-        public void SetParam(uint param)
+        private void SetParam(uint param)
         {
             if ((_valueSize = _type.GetParamSize()) != 1)
             {
@@ -51,7 +51,7 @@ namespace compiler_c0.instruction
             SetParam(param);
         }
 
-        public void SetParam(ulong param)
+        private void SetParam(ulong param)
         {
             if ((_valueSize = _type.GetParamSize()) != 2)
             {

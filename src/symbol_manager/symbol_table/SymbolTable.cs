@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using compiler_c0.symbol_manager.symbol;
-using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
+using ValueType = compiler_c0.symbol_manager.symbol.value_type.ValueType;
 
-namespace compiler_c0.symbol_manager
+namespace compiler_c0.symbol_manager.symbol_table
 {
     public class SymbolTable
     {

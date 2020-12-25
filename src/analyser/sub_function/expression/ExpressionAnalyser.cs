@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using compiler_c0.instruction;
 using compiler_c0.symbol_manager;
+using compiler_c0.symbol_manager.instruction;
 using compiler_c0.symbol_manager.symbol;
-using compiler_c0.symbol_manager.value_type;
+using compiler_c0.symbol_manager.symbol.value_type;
 using compiler_c0.tokenizer;
 using compiler_c0.tokenizer.token;
 using compiler_c0.tokenizer.token.extensions;
-using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
+using ValueType = compiler_c0.symbol_manager.symbol.value_type.ValueType;
 
 namespace compiler_c0.analyser.sub_function.expression
 {
@@ -83,7 +81,7 @@ namespace compiler_c0.analyser.sub_function.expression
             return lValue;
         }
 
-        public static ExpressionValue AnalyseNegExpression()
+        private static ExpressionValue AnalyseNegExpression()
         {
             Tokenizer.ExpectToken(TokenType.Minus);
             var value =  ParsePrimary();
@@ -112,8 +110,8 @@ namespace compiler_c0.analyser.sub_function.expression
                 return AnalyseIdentExpression();
             throw new Exception("symbol not found");
         }
-        
-        public static ExpressionValue AnalyseIdentExpression()
+
+        private static ExpressionValue AnalyseIdentExpression()
         {
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
             var symbol = SymbolManager.FindSymbol((string) ident.Value);

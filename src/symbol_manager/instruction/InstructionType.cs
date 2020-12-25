@@ -1,4 +1,4 @@
-namespace compiler_c0.instruction
+namespace compiler_c0.symbol_manager.instruction
 {
     public enum InstructionType : byte
     {

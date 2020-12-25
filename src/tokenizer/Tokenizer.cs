@@ -5,7 +5,6 @@ using System.Text;
 using compiler_c0.char_parser;
 using compiler_c0.tokenizer.token;
 using compiler_c0.tokenizer.token.extensions;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace compiler_c0.tokenizer
 {
@@ -58,7 +57,7 @@ namespace compiler_c0.tokenizer
             throw new Exception($"unexpected token: {token}");
         }
 
-        private CharParser _charParser = CharParser.Instance;
+        private readonly CharParser _charParser = CharParser.Instance;
 
         private Token _fetchNextToken()
         {
@@ -215,7 +214,9 @@ namespace compiler_c0.tokenizer
             // check comment
             if (firstChar == '/' && _charParser.PeekChar() == '/')
             {
-                while (_charParser.NextChar() != '\n') ;
+                while (_charParser.NextChar() != '\n')
+                {
+                }
 
                 return _fetchNextToken();
             }

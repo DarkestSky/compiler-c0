@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using compiler_c0.instruction;
-using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
+using compiler_c0.symbol_manager.instruction;
+using ValueType = compiler_c0.symbol_manager.symbol.value_type.ValueType;
 
 namespace compiler_c0.symbol_manager.symbol
 {
@@ -15,13 +15,13 @@ namespace compiler_c0.symbol_manager.symbol
 
         public uint ReturnSlot { get; protected set; }
 
-        public ValueType ReturnType { get; set; }
+        public ValueType ReturnType { get; protected set; }
 
-        public uint ParamSlots { get; protected set; }
+        private uint ParamSlots { get; set; }
 
         public uint LocSlots { get; set; }
 
-        public readonly List<ValueType> Params = new();
+        protected readonly List<ValueType> Params = new();
 
         private readonly List<Instruction> _instructions = new();
 

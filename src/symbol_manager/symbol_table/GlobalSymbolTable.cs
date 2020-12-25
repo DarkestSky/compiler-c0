@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using compiler_c0.symbol_manager.symbol;
-using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
+using ValueType = compiler_c0.symbol_manager.symbol.value_type.ValueType;
 
-namespace compiler_c0.symbol_manager
+namespace compiler_c0.symbol_manager.symbol_table
 {
     public class GlobalSymbolTable : SymbolTable
     {
-        // private readonly List<KeyValuePair<string, Variable>> Variables = new();
-
         // ReSharper disable once InconsistentNaming
         private readonly List<KeyValuePair<string, Function>> Functions = new();
 

@@ -1,13 +1,10 @@
-using compiler_c0.symbol_manager.value_type;
-using compiler_c0.tokenizer;
+using compiler_c0.symbol_manager.symbol.value_type;
 
 namespace compiler_c0.analyser.sub_function.expression
 {
     public class ExpressionValue
     {
-        public ValueType ValueType { get; set; }
-        
-        public bool IsAddress { get; set; }
+        public ValueType ValueType { get; }
 
         public ExpressionValue(ValueType t)
         {

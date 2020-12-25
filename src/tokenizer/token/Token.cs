@@ -13,7 +13,7 @@ namespace compiler_c0.tokenizer.token
 
         public TokenType TokenType { get; }
         private Pos Pos { get; }
-        public object Value { get; set; }
+        public object Value { get; init; }
 
         public override string ToString()
         {

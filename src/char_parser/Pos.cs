@@ -1,5 +1,3 @@
-using System;
-
 namespace compiler_c0.char_parser
 {
     public class Pos

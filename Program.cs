@@ -17,16 +17,16 @@ namespace compiler_c0
 
             var analyser = Analyser.Instance;
 
-            try
-            {
+            // try
+            // {
                 analyser.Analyse();
                 symbolManager.Generator();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Environment.ExitCode = 1;
-            }
+            // }
+            // catch (Exception e)
+            // {
+            //     Console.WriteLine(e.Message);
+            //     Environment.ExitCode = 1;
+            // }
         }
     }
 }

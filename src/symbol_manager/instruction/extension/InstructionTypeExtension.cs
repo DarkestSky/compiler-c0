@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace compiler_c0.instruction.extension
+namespace compiler_c0.symbol_manager.instruction.extension
 {
     public static class InstructionTypeExtension
     {

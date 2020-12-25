@@ -6,6 +6,7 @@
       <e p="bin" t="ExcludeRecursive" />
       <e p="compiler-c0.csproj" t="IncludeRecursive" />
       <e p="compiler-c0.sln" t="IncludeFlat" />
+      <e p="compiler-c0.sln.DotSettings" t="Include" />
       <e p="Dockerfile" t="Include" />
       <e p="input.txt" t="Include" />
       <e p="judge.toml" t="Include" />
@@ -38,34 +39,33 @@
           <e p="CharParser.cs" t="Include" />
           <e p="Pos.cs" t="Include" />
         </e>
-        <e p="generator" t="Include">
-          <e p="Generator.cs" t="Include" />
-        </e>
         <e p="global_config" t="Include">
           <e p="GlobalConfig.cs" t="Include" />
         </e>
-        <e p="instruction" t="Include">
-          <e p="extension" t="Include">
-            <e p="InstructionTypeExtension.cs" t="Include" />
-          </e>
-          <e p="Instruction.cs" t="Include" />
-          <e p="InstructionType.cs" t="Include" />
-        </e>
         <e p="symbol_manager" t="Include">
-          <e p="GlobalSymbolTable.cs" t="Include" />
+          <e p="instruction" t="Include">
+            <e p="extension" t="Include">
+              <e p="InstructionTypeExtension.cs" t="Include" />
+            </e>
+            <e p="Instruction.cs" t="Include" />
+            <e p="InstructionType.cs" t="Include" />
+          </e>
           <e p="symbol" t="Include">
             <e p="Function.cs" t="Include" />
             <e p="LibFunction.cs" t="Include" />
             <e p="Param.cs" t="Include" />
             <e p="Symbol.cs" t="Include" />
+            <e p="value_type" t="Include">
+              <e p="Extension.cs" t="Include" />
+              <e p="ValueType.cs" t="Include" />
+            </e>
             <e p="Variable.cs" t="Include" />
           </e>
-          <e p="SymbolManager.cs" t="Include" />
-          <e p="SymbolTable.cs" t="Include" />
-          <e p="value_type" t="Include">
-            <e p="entension.cs" t="Include" />
-            <e p="ValueType.cs" t="Include" />
+          <e p="symbol_table" t="Include">
+            <e p="GlobalSymbolTable.cs" t="Include" />
+            <e p="SymbolTable.cs" t="Include" />
           </e>
+          <e p="SymbolManager.cs" t="Include" />
         </e>
         <e p="tokenizer" t="Include">
           <e p="token" t="Include">

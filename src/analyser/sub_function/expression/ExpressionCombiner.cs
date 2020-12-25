@@ -1,8 +1,8 @@
 using System;
-using compiler_c0.instruction;
 using compiler_c0.symbol_manager;
+using compiler_c0.symbol_manager.instruction;
 using compiler_c0.tokenizer.token;
-using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
+using ValueType = compiler_c0.symbol_manager.symbol.value_type.ValueType;
 
 namespace compiler_c0.analyser.sub_function.expression
 {
@@ -25,7 +25,7 @@ namespace compiler_c0.analyser.sub_function.expression
                 case TokenType.Div:
                     return CombineDiv(lValue, rValue);
                 case TokenType.Assign:
-                    return CombineAssign(lValue, rValue);
+                    return CombineAssign();
                 case TokenType.Eq:
                     return CombineEq(lValue, rValue);
                 case TokenType.Neq:
@@ -115,7 +115,7 @@ namespace compiler_c0.analyser.sub_function.expression
             return lValue;
         }
         
-        private static ExpressionValue CombineAssign(ExpressionValue lValue, ExpressionValue rValue)
+        private static ExpressionValue CombineAssign()
         {
             SymbolManager.AddInstruction(new Instruction(InstructionType.Store64));
             return new ExpressionValue(ValueType.Void);

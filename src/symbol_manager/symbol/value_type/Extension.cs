@@ -1,9 +1,10 @@
 using System;
 using compiler_c0.tokenizer.token;
+using ValueType = compiler_c0.symbol_manager.symbol.value_type.ValueType;
 
-namespace compiler_c0.symbol_manager.value_type
+namespace compiler_c0.symbol_manager.symbol.value_type
 {
-    public static class entension
+    public static class Extension
     {
         public static ValueType ToValueType(this Token t)
         {

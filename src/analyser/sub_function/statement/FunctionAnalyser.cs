@@ -1,8 +1,6 @@
-using System;
-using compiler_c0.instruction;
 using compiler_c0.symbol_manager;
-using compiler_c0.symbol_manager.symbol;
-using compiler_c0.symbol_manager.value_type;
+using compiler_c0.symbol_manager.instruction;
+using compiler_c0.symbol_manager.symbol.value_type;
 using compiler_c0.tokenizer;
 using compiler_c0.tokenizer.token;
 
@@ -59,8 +57,7 @@ namespace compiler_c0.analyser.sub_function.statement
             Tokenizer.ExpectToken(TokenType.Colon);
             var type = Tokenizer.ExpectToken(TokenType.Identifier);
 
-            
-            var param = SymbolManager.NewParam((string) ident.Value, type.ToValueType(), isConst);
+            SymbolManager.NewParam((string) ident.Value, type.ToValueType(), isConst);
         }
     }
 }

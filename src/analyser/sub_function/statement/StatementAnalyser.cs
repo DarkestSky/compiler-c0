@@ -1,12 +1,11 @@
 using System;
-using System.Text;
 using compiler_c0.analyser.sub_function.expression;
-using compiler_c0.instruction;
 using compiler_c0.symbol_manager;
-using compiler_c0.symbol_manager.value_type;
+using compiler_c0.symbol_manager.instruction;
+using compiler_c0.symbol_manager.symbol.value_type;
 using compiler_c0.tokenizer;
 using compiler_c0.tokenizer.token;
-using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
+using ValueType = compiler_c0.symbol_manager.symbol.value_type.ValueType;
 
 namespace compiler_c0.analyser.sub_function.statement
 {
@@ -15,7 +14,7 @@ namespace compiler_c0.analyser.sub_function.statement
         private static readonly Tokenizer Tokenizer = Tokenizer.Instance;
         private static readonly SymbolManager SymbolManager = SymbolManager.Instance;
 
-        public static void AnalyseStatement()
+        private static void AnalyseStatement()
         {
             switch (Tokenizer.PeekToken().TokenType)
             {
@@ -52,7 +51,7 @@ namespace compiler_c0.analyser.sub_function.statement
             }
         }
 
-        public static void AnalyseExpressionStatement()
+        private static void AnalyseExpressionStatement()
         {
             ExpressionAnalyser.AnalyseExpression();
             Tokenizer.ExpectToken(TokenType.Semicolon);
@@ -74,7 +73,7 @@ namespace compiler_c0.analyser.sub_function.statement
             }
         }
 
-        public static void AnalyseLetStatement()
+        private static void AnalyseLetStatement()
         {
             Tokenizer.ExpectToken(TokenType.Let);
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
@@ -102,7 +101,7 @@ namespace compiler_c0.analyser.sub_function.statement
             Tokenizer.ExpectToken(TokenType.Semicolon);
         }
 
-        public static void AnalyseConstStatement()
+        private static void AnalyseConstStatement()
         {
             Tokenizer.ExpectToken(TokenType.Const);
             var ident = Tokenizer.ExpectToken(TokenType.Identifier);
@@ -121,7 +120,7 @@ namespace compiler_c0.analyser.sub_function.statement
             variable.Initial();
         }
 
-        public static void AnalyseIfStatement()
+        private static void AnalyseIfStatement()
         {
             Tokenizer.ExpectToken(TokenType.If);
             var condition = ExpressionAnalyser.AnalyseExpression();
@@ -156,7 +155,7 @@ namespace compiler_c0.analyser.sub_function.statement
             SymbolManager.AddInstruction(new Instruction(InstructionType.Br, 0));
         }
 
-        public static void AnalyseWhileStatement()
+        private static void AnalyseWhileStatement()
         {
             Tokenizer.ExpectToken(TokenType.While);
             
@@ -198,7 +197,7 @@ namespace compiler_c0.analyser.sub_function.statement
                 SymbolManager.DeleteSymbolTable();
         }
 
-        public static void AnalyseReturnStatement()
+        private static void AnalyseReturnStatement()
         {
             Tokenizer.ExpectToken(TokenType.Return);
             if (SymbolManager.CurFunction.ReturnType != ValueType.Void)
@@ -221,7 +220,7 @@ namespace compiler_c0.analyser.sub_function.statement
             SymbolManager.AddInstruction(new Instruction(InstructionType.Ret));
         }
 
-        public static void AnalyseEmptyStatement()
+        private static void AnalyseEmptyStatement()
         {
             Tokenizer.ExpectToken(TokenType.Semicolon);
         }

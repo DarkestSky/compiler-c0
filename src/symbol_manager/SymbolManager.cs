@@ -2,16 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using compiler_c0.global_config;
-using compiler_c0.instruction;
+using compiler_c0.symbol_manager.instruction;
 using compiler_c0.symbol_manager.symbol;
-using ValueType = compiler_c0.symbol_manager.value_type.ValueType;
+using compiler_c0.symbol_manager.symbol_table;
+using ValueType = compiler_c0.symbol_manager.symbol.value_type.ValueType;
 
 namespace compiler_c0.symbol_manager
 {
     public class SymbolManager
     {
+        // ReSharper disable once InconsistentNaming
         private readonly GlobalConfig GlobalConfig = GlobalConfig.Instance;
         
         private readonly List<SymbolTable> _symbolTables = new();
@@ -194,7 +195,7 @@ namespace compiler_c0.symbol_manager
             _symbolTables.RemoveAt(_symbolTables.Count - 1);
         }
 
-        public Function CurFunction { get; set; }
+        public Function CurFunction { get; private set; }
 
         private void LoadLibFunctions()
         {
